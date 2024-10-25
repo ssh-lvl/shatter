@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const FNotificationId = 'accountRemoveal'; // Change this for each new notification
-  const FNotificationImportance = 1; // Change this to set importance level (1, 2, or 3)
+  const FNotificationId = 'FormFfawgsdhfOmr'; // Change this for each new notification
+  const FNotificationImportance = 3; // Change this to set importance level (1, 2, or 3)
 
   const FNotificationStyles = `
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
@@ -200,10 +200,10 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.className = 'FNotification-modal';
     modal.innerHTML = `
       <div class="FNotification-modal-content">
-        <h2>Accounts have been removed</h2>
-        <p>
-        Enjoy fracture fully without restriction<br>
-        </p>
+<br>
+<a style="color: white;"  href="https://forms.gle/QYpdnmD1TWcxYBAj7">https://forms.gle/QYpdnmD1TWcxYBAj7</a><br>
+<br>
+<a style="color: white;" href="https://forms.gle/rFH4N5vxoj6MW2Pz5<">https://forms.gle/rFH4N5vxoj6MW2Pz5</a><br>
         <button class="FNotification-close-btn" onclick="FNotificationClose()">Close Notification</button>
       </div>
     `;
