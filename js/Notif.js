@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const FNotificationId = 'FormFfawgsdhfOmr'; // Change this for each new notification
+  const FNotificationId = 'urgenguergen'; // Change this for each new notification
   const FNotificationImportance = 3; // Change this to set importance level (1, 2, or 3)
 
   const FNotificationStyles = `
@@ -200,10 +200,9 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.className = 'FNotification-modal';
     modal.innerHTML = `
       <div class="FNotification-modal-content">
-<br>
-<a style="color: white;"  href="https://forms.gle/QYpdnmD1TWcxYBAj7">https://forms.gle/QYpdnmD1TWcxYBAj7</a><br>
-<br>
-<a style="color: white;" href="https://forms.gle/rFH4N5vxoj6MW2Pz5<">https://forms.gle/rFH4N5vxoj6MW2Pz5</a><br>
+<a> DONT SEND ME EMAILS ABOUT THIS YOU ARE GOING TO GET ME IN MASSIVE TROUBLE</a>
+<a> MAKE YOUR OWN FRACTURE BRANCH AND USE IT FOR YOUR SELF </a>
+<a> replace the <name>.html in the url bar with tutorial.html </a>
         <button class="FNotification-close-btn" onclick="FNotificationClose()">Close Notification</button>
       </div>
     `;
