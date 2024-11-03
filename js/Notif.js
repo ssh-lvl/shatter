@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const FNotificationId = 'urgenguergen'; // Change this for each new notification
+  const FNotificationId = 'newnwn'; // Change this for each new notification
   const FNotificationImportance = 3; // Change this to set importance level (1, 2, or 3)
 
   const FNotificationStyles = `
@@ -200,9 +200,14 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.className = 'FNotification-modal';
     modal.innerHTML = `
       <div class="FNotification-modal-content">
-<a> DONT SEND ME EMAILS ABOUT THIS YOU ARE GOING TO GET ME IN MASSIVE TROUBLE</a>
-<a> MAKE YOUR OWN FRACTURE BRANCH AND USE IT FOR YOUR SELF </a>
-<a> replace the <name>.html in the url bar with tutorial.html </a>
+
+<a>Sign Up for the new fratchat, sorry yall!</a>
+
+<br>
+      <br>
+<a> DONT SEND ME EMAILS ABOUT THIS YOU ARE GOING TO GET ME IN MASSIVE TROUBLE</a><br>
+<a> MAKE YOUR OWN FRACTURE BRANCH AND USE IT FOR YOUR SELF </a><br>
+<a> replace the <name>.html in the url bar with tutorial.html </a><br>
         <button class="FNotification-close-btn" onclick="FNotificationClose()">Close Notification</button>
       </div>
     `;

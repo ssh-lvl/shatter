@@ -1,4 +1,7 @@
 <head>
+  <script>
+
+  </script>
   <script src="js/chromebookcheck.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/BranchUni.js"></script>
@@ -86,8 +89,8 @@ document.addEventListener('keydown', handleKonamiCode);
     });
 </script>
 </body>
-<div style="position: fixed; bottom: 10px; right: 10px; background-color: rgba(204, 0, 255, 0.075); padding: 10px; border-radius: 5px;">
-    <p id="fractureVersionNumber" style="margin: 0;">6.5.0</p>
+<div class="floating-element">
+    <p id="fractureVersionNumber" style="margin: 0;">7.0.0</p>
 </div>
 <br>
 <script>
@@ -100,9 +103,23 @@ changeText();
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: 90vh;
             margin: 0;
         }
+
+.floating-element {
+  position: fixed;
+bottom: 0.625rem;
+right: 0.625rem;
+background: var(--color-major);
+border: 1px solid var(--color-border);
+padding: 0.625rem;
+border-radius: 0.3125rem;
+backdrop-filter: blur(4px);
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+transition: all 0.2s ease;
+}
+
   body {
     margin: 0;
     padding: 0;
@@ -236,6 +253,163 @@ changeText();
   0% { border-radius: 0; }
   100% { border-radius: 50%; }
 }
+
+.warn-warning-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-minor-lesser);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.warn-warning-container {
+  background: var(--color-major);
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 15px rgba(153, 0, 255, 0.2);
+  border: 1px solid var(--color-accent2);
+}
+
+.warn-warning-title {
+  color: var(--color-accent2);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.warn-warning-description {
+  color: var(--color-text-light);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.warn-dismiss-button {
+  background: var(--color-button);
+  color: var(--color-text-light);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.warn-dismiss-button:hover {
+  background: var(--color-button-hover);
+  transform: translateY(-2px);
+}
+
+.a-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--color-major);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    display: none;
+    animation: slideIn 0.3s ease-out;
+    z-index: 1000;
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-text);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.a-notification.show {
+    display: flex;
+}
+
+.a-notification p {
+    margin: 0;
+    margin-right: 15px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-yes {
+    background-color: var(--color-button);
+    color: var(--color-text);
+}
+
+.btn-yes:hover {
+    background-color: var(--color-button-hover);
+}
+
+.btn-no {
+    background-color: var(--color-major-lesser);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.btn-no:hover {
+    background-color: var(--color-minor-lesser);
+}
+
+.backup-progress {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-major);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.4);
+    display: none;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    min-width: 300px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: var(--color-major-lesser);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--color-button);
+    transition: width 0.3s ease;
+}
   </style>
   <div id="navcontainer3">
   </div>
@@ -304,14 +478,143 @@ body {
 </script>
 
     <script>
+      // Main cloaking function that can be called externally
+function initializeCloak(buttonId = "ab-cloak-button") {
+    // Check if we're in an iframe or about:blank
+    function shouldPreventCloak() {
+        try {
+            // Check if we're in an iframe
+            if (window !== window.top) return true;
+            
+            // Check if we're on about:blank
+            if (window.location.href === "about:blank") return true;
+            
+            return false;
+        } catch (error) {
+            // If we can't access window.top due to cross-origin,
+            // we're probably in an iframe
+            return true;
+        }
+    }
+
+    // Don't initialize if we're in an iframe or about:blank
+    if (shouldPreventCloak()) {
+        console.debug("Cloak initialization prevented: page is in iframe or about:blank");
+        return;
+    }
+
+    function cloakPage(targetUrl) {
+        try {
+            var win = window.open('about:blank', '_blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
+            if (!win) throw new Error("Popup blocked");
+            
+            win.document.body.style.margin = "0";
+            win.document.body.style.height = "100vh";
+            
+            var iframe = win.document.createElement("iframe");
+            iframe.style.border = "none";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.margin = "0";
+            iframe.referrerpolicy = "no-referrer";
+            iframe.allow = "fullscreen";
+            iframe.src = targetUrl;
+            
+            win.document.body.appendChild(iframe);
+            window.close();
+            return true;
+        } catch (error) {
+            console.error("Error in cloaking process:", error);
+            return false;
+        }
+    }
+
+    function attachCloakHandler(element) {
+        element.onclick = function() {
+            var url;
+            try {
+                url = window.location.href;
+            } catch (error) {
+                console.error("Error getting current URL:", error);
+                url = "https://graystuido.github.io/Fracture/index.html";
+            }
+            return cloakPage(url);
+        };
+    }
+
+    // Create invisible overlay for click handling if needed
+    function createClickOverlay() {
+        var overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'transparent';
+        overlay.style.zIndex = '2147483647'; // Maximum z-index
+        overlay.style.cursor = 'pointer';
+        
+        overlay.onclick = function() {
+            var url = window.location.href;
+            cloakPage(url);
+            document.body.removeChild(overlay);
+        };
+        
+        document.body.appendChild(overlay);
+    }
+
+    // Initialize when DOM is ready
+    function initialize() {
+        try {
+            var button = document.getElementById(buttonId);
+            if (button) {
+                attachCloakHandler(button);
+            } else {
+                throw new Error("Button not found");
+            }
+        } catch (error) {
+            console.warn("Falling back to click overlay:", error);
+            createClickOverlay();
+        }
+    }
+
+    // Handle both DOMContentLoaded and load events
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initialize);
+    } else {
+        initialize(); // DOM is already ready
+    }
+
+    // Backup initialization if DOMContentLoaded fails
+    window.addEventListener("load", function() {
+        var button = document.getElementById(buttonId);
+        if (!button || !button.onclick) {
+            initialize();
+        }
+    });
+}
+
+// Export functions for external use if we're not in an iframe/about:blank
+if (!shouldPreventCloak()) {
+    window.initializeCloak = initializeCloak;
+    window.cloakPage = cloakPage;
+    
+    // Auto-initialize with default button ID
+    initializeCloak();
+}
+    </script>
+
+
+    <script>
       document.getElementById("ab-cloak-button").onclick = function () {
     var url;
     try {
         url = window.location.href;
     } catch (error) {
         console.error("Error getting current URL:", error);
-        url = "https://graystuido.github.io/Fracture/index.html";
+        url = "https://graystudio.github.io/Fracture/index.html";
     }
+
     var win = window.open('about:blank', '_blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
     win.document.body.style.margin = "0";
     win.document.body.style.height = "100vh";
@@ -325,11 +628,117 @@ body {
     iframe.src = url;
     win.document.body.appendChild(iframe);
 
-    // Close the current tab
-    window.close();
+    // Attempt to close the current tab
+    var closed = window.close();
+    if (!closed) {
+        // If window.close() fails, redirect to Google
+        window.location.href = "https://google.com";
+    }
 };
-
     </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're in an iframe or about:blank
+    if (window.location.href === "about:blank" || window !== window.top) {
+        return; // Do not run if in an iframe or about:blank
+    }
+
+    // Check if installed in localStorage
+    if (localStorage.getItem('autoab') !== 'installed') {
+        return; // Exit if not installed
+    }
+
+    // Function to run the cloak operation
+    function runCloak() {
+        var url;
+        try {
+            url = window.location.href;
+        } catch (error) {
+            console.error("Error getting current URL:", error);
+            url = "https://graystudio.github.io/Fracture/index.html";
+        }
+        
+        var win = window.open('about:blank', '_blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
+        win.document.body.style.margin = "0";
+        win.document.body.style.height = "100vh";
+        var iframe = win.document.createElement("iframe");
+        iframe.style.border = "none";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.margin = "0";
+        iframe.referrerpolicy = "no-referrer";
+        iframe.allow = "fullscreen";
+        iframe.src = url;
+        win.document.body.appendChild(iframe);
+
+        // Attempt to close the current tab
+        var closed = window.close();
+        if (!closed) {
+            // If window.close() fails, redirect to Google
+            window.location.href = "https://google.com";
+        }
+    }
+
+    // Create invisible overlay
+    var overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.zIndex = '999999';
+    overlay.style.cursor = 'default';
+    overlay.style.opacity = '0';
+    document.body.appendChild(overlay);
+
+    // Add click handler to the overlay
+    overlay.addEventListener('click', runCloak);
+});
+    </script>
+
+
+
+    <script>
+    function checkFirstVisit() {
+      if (!localStorage.getItem('hasVisited')) {
+        const overlay = document.createElement('div');
+        overlay.className = 'warn-warning-overlay';
+        
+        const container = document.createElement('div');
+        container.className = 'warn-warning-container';
+        
+        const title = document.createElement('div');
+        title.className = 'warn-warning-title';
+        title.textContent = 'DON\'T SEND THIS WEBSITE OVER EMAIL';
+        
+        const description = document.createElement('div');
+        description.className = 'warn-warning-description';
+        description.textContent = 'This website will be blocked if sent to and from any name@nclack.org email, spread through word of mouth or a secure channel.';
+        
+        const button = document.createElement('button');
+        button.className = 'warn-dismiss-button';
+        button.textContent = 'I Understand';
+        
+        button.addEventListener('click', () => {
+          overlay.remove();
+          localStorage.setItem('hasVisited', 'true');
+        });
+        
+        container.appendChild(title);
+        container.appendChild(description);
+        container.appendChild(button);
+        overlay.appendChild(container);
+        document.body.appendChild(overlay);
+      }
+    }
+
+    window.addEventListener('load', checkFirstVisit);
+  </script>
+
+
+
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @keyframes breathing {
@@ -527,3 +936,184 @@ window.onload = function() {
 };
 </script>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const BACKUP_INTERVAL_DAYS = 5;
+    const STORAGE_KEY = 'nextBackupDate';
+    
+    // Function to check if backup is due
+    function isBackupDue() {
+        const nextBackupDate = localStorage.getItem(STORAGE_KEY);
+        if (!nextBackupDate) return true;
+        
+        const nextDate = new Date(nextBackupDate);
+        const currentDate = new Date();
+        return currentDate >= nextDate;
+    }
+    
+    // Function to set next backup date
+    function setNextBackupDate() {
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + BACKUP_INTERVAL_DAYS);
+        localStorage.setItem(STORAGE_KEY, nextDate.toISOString());
+    }
+    
+    // Initialize UI elements
+    const notification = document.createElement('div');
+    notification.id = 'backupNotification';
+    notification.className = 'a-notification';
+    
+    const text = document.createElement('p');
+    text.textContent = 'Backup Data';
+    
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'btn-group';
+    
+    const yesBtn = document.createElement('button');
+    yesBtn.className = 'btn btn-yes';
+    yesBtn.textContent = 'Click';
+    
+    // Assemble UI elements
+    btnGroup.appendChild(yesBtn);
+    notification.appendChild(text);
+    notification.appendChild(btnGroup);
+    
+    // Create backup progress UI
+    const backupProgress = document.createElement('div');
+    backupProgress.id = 'backupProgress';
+    backupProgress.className = 'backup-progress';
+    
+    const heading = document.createElement('h3');
+    heading.textContent = 'Backing up data...';
+    
+    const progressBar = document.createElement('div');
+    progressBar.className = 'progress-bar';
+    const progressFill = document.createElement('div');
+    progressFill.id = 'progressBar';
+    progressFill.className = 'progress-fill';
+    progressBar.appendChild(progressFill);
+    
+    const statusText = document.createElement('p');
+    statusText.id = 'statusText';
+    
+    const errorMessage = document.createElement('p');
+    errorMessage.id = 'errorMessage';
+    errorMessage.style.color = 'var(--color-uninstall)';
+    
+    backupProgress.appendChild(heading);
+    backupProgress.appendChild(progressBar);
+    backupProgress.appendChild(statusText);
+    backupProgress.appendChild(errorMessage);
+    
+    document.body.appendChild(notification);
+    document.body.appendChild(backupProgress);
+    
+    // Initialize UI update functions
+    const updateUI = (() => {
+        const statusTextEl = document.getElementById('statusText');
+        const progressBarEl = document.getElementById('progressBar');
+        const errorMessageEl = document.getElementById('errorMessage');
+        
+        return {
+            status: (message, progress = null) => {
+                statusTextEl.textContent = message;
+                if (progress !== null) {
+                    progressBarEl.style.width = `${progress}%`;
+                }
+            },
+            error: (message) => {
+                errorMessageEl.textContent = message;
+            },
+            reset: () => {
+                statusTextEl.textContent = '';
+                progressBarEl.style.width = '0%';
+                errorMessageEl.textContent = '';
+            }
+        };
+    })();
+    
+    // Event handlers
+    function handleBackupNo() {
+        setNextBackupDate();
+        notification.classList.remove('show');
+    }
+    
+    async function handleBackupYes() {
+        notification.classList.remove('show');
+        backupProgress.style.display = 'block';
+        
+        try {
+            await exportLocalStorage(updateUI);
+            setNextBackupDate();
+            
+            setTimeout(() => {
+                backupProgress.style.display = 'none';
+                updateUI.reset();
+            }, 2000);
+        } catch (error) {
+            console.error('Backup failed:', error);
+            updateUI.error(`Backup failed: ${error.message}`);
+        }
+    }
+    
+    // Attach event handlers
+    yesBtn.onclick = () => handleBackupYes();
+    noBtn.onclick = handleBackupNo;
+    
+    // Check if backup is due and show notification if needed
+    if (isBackupDue()) {
+        notification.classList.add('show');
+    }
+});
+
+// Utility functions remain the same
+const getCurrentDateTime = () => new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14);
+
+const processInChunks = async (items, processItem, updateProgress) => {
+    const chunkSize = 100;
+    const totalItems = items.length;
+
+    for (let i = 0; i < totalItems; i += chunkSize) {
+        const chunk = items.slice(i, Math.min(i + chunkSize, totalItems));
+        await Promise.all(chunk.map(processItem));
+        updateProgress(Math.min(i + chunkSize, totalItems), totalItems);
+        await new Promise(resolve => setTimeout(resolve, 0));
+    }
+};
+
+const exportLocalStorage = async (updateUI) => {
+    updateUI.status('Preparing export...', 0);
+    updateUI.error('');
+
+    try {
+        const keys = Object.keys(localStorage);
+        const totalItems = keys.length;
+        const localStorageData = {};
+
+        await processInChunks(
+            keys,
+            async (key) => {
+                localStorageData[key] = localStorage.getItem(key);
+            },
+            (processed, total) => {
+                updateUI.status(`Exporting... ${processed}/${total}`, (processed / total) * 100);
+            }
+        );
+
+        const blob = new Blob([JSON.stringify(localStorageData)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup-${getCurrentDateTime()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        updateUI.status('Export Complete!', 100);
+    } catch (error) {
+        console.error('Export error:', error);
+        updateUI.status('Export Failed!', 0);
+        updateUI.error(`Error: ${error.message}`);
+        throw error;
+    }
+};
+  </script>

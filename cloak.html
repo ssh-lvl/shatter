@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/chromebookcheck.js"></script>
+<script src="js/background-switcher.js"></script>
+<link rel="icon" type="image/png" href="favicon.png">
+<script src="js/theme-switcher.js"></script>
+<link rel="stylesheet" href="css/theme-index.css">
+<script src="js/navgen.js"></script>
+<script src="js/lastpage.js"></script>
+<script src="js/ErudaConsole.js"></script>
+
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: var(--color-accent2);
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: var(--color-accent2);
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-panel, .addon {
+    background: var(--color-major);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.setting-group, .config-group {
+    margin-bottom: 20px;
+}
+
+.setting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--color-text-light);
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-minor);
+    color: var(--color-text);
+    margin-bottom: 5px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: 2px solid var(--color-accent2);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-minor);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: var(--color-text);
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--color-accent2);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.preview {
+    background: var(--color-minor);
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.preview-title {
+    color: var(--color-text-light);
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.preview-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.button-group, .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.save-btn {
+    background: var(--color-accent2);
+    color: var(--color-background);
+}
+
+.save-btn:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+}
+
+.reset-btn {
+    background: var(--color-minor);
+    color: var(--color-text);
+}
+
+.reset-btn:hover {
+    background: var(--color-minor-lesser);
+    transform: translateY(-2px);
+}
+
+.status-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    display: none;
+}
+
+.success {
+    background: var(--color-accent2);
+    opacity: 0.3;
+    color: var(--color-text);
+}
+
+.error {
+    background: var(--color-uninstall);
+    opacity: 0.3;
+    color: var(--color-text);
+}
+
+.info-text {
+    color: var(--color-text-muted);
+    font-size: 0.9em;
+    margin-top: 4px;
+}
+
+.checkbox-group {
+    margin-bottom: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.cloak-settings {
+    background: var(--color-minor);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Advanced Page Cloaker</h1>
+    
+    <div class="addon">
+        <h3>
+            Page Cloaker
+            <label class="switch">
+                <input type="checkbox" id="cloakSwitch" onchange="toggleCloak()">
+                <span class="slider"></span>
+            </label>
+        </h3>
+        <p>Automatically cloaks your page when switching tabs or clicking the ` key</p>
+        <div class="cloak-settings">
+            <input type="text" id="cloakImageSrc" placeholder="Cloak Image URL">
+            <input type="text" id="cloakFaviconSrc" placeholder="Cloak Favicon URL">
+            <input type="text" id="cloakPageTitle" placeholder="Cloak Page Title">
+            <input type="text" id="cloakBlacklist" placeholder="Blacklisted URLs (comma separated)">
+            <div class="action-buttons">
+                <button onclick="saveCloakSettings()">Save Settings</button>
+                <button onclick="setDefaultCloakSettings()">Reset to Default</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="addon">
+        <h3>
+            Tab Protection
+            <label class="switch">
+                <input type="checkbox" id="protectionSwitch" onchange="toggleTabProtection()">
+                <span class="slider"></span>
+            </label>
+        </h3>
+        <p>Prevents unwanted tab closure attempts</p>
+    </div>
+</div>
+
+<div class="settings-panel">
+    <div class="setting-header">
+        <h3>Tab Cloaking</h3>
+        <label class="switch">
+            <input type="checkbox" id="cloakToggle" onchange="toggleCloaking()">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="setting-group">
+        <div class="input-group">
+            <label for="faviconInput">Favicon URL</label>
+            <input type="text" id="faviconInput" placeholder="Enter favicon URL" onchange="updatePreview()">
+        </div>
+
+        <div class="input-group">
+            <label for="tabNameInput">Tab Name</label>
+            <input type="text" id="tabNameInput" placeholder="Enter tab name" onchange="updatePreview()">
+        </div>
+
+        <div class="preview">
+            <div class="preview-title">Preview</div>
+            <div class="preview-content">
+                <img id="faviconPreview" class="preview-favicon" src="https://example.com/favicon.ico" alt="Favicon preview">
+                <span id="tabNamePreview">Tab Name Preview</span>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+            <button class="reset-btn" onclick="resetSettings()">Reset to Default</button>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+</div>
+</div>
+<div class="container"></div>
+    <div class="settings-panel">
+        <div class="setting-header">
+            <h3>Auto About:Blank</h3>
+            <label class="switch">
+                <input type="checkbox" id="autoabToggle" onchange="toggleAutoBlank()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="config-group">
+            <div class="input-group">
+                <label for="windowWidth">Window Width (pixels)</label>
+                <input type="number" id="windowWidth" placeholder="Default: 1080" min="500" max="4000">
+                <div class="info-text">Width of the new window (minimum 500px)</div>
+            </div>
+
+            <div class="input-group">
+                <label for="windowHeight">Window Height (pixels)</label>
+                <input type="number" id="windowHeight" placeholder="Default: 800" min="400" max="2400">
+                <div class="info-text">Height of the new window (minimum 400px)</div>
+            </div>
+
+            <div class="input-group">
+                <label for="fallbackUrl">Fallback URL</label>
+                <input type="text" id="fallbackUrl" placeholder="Default: https://graystudio.github.io/Fracture/index.html">
+                <div class="info-text">URL to use if current URL cannot be retrieved</div>
+            </div>
+
+            <div class="input-group">
+                <label for="redirectUrl">Redirect URL</label>
+                <input type="text" id="redirectUrl" placeholder="Default: https://google.com">
+                <div class="info-text">URL to redirect to if window cannot be closed</div>
+            </div>
+
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="resizableCheck">
+                    Allow Window Resizing
+                </label>
+            </div>
+
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="scrollCheck">
+                    Show Scrollbars
+                </label>
+            </div>
+
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="autoRunCheck">
+                    Auto-run in iframes
+                </label>
+            </div>
+
+            <div class="button-group">
+                <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+                <button class="reset-btn" onclick="resetSettings()">Reset to Default</button>
+            </div>
+
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const DEFAULT_SETTINGS = {
+    enabled: false,
+    windowWidth: 1080,
+    windowHeight: 800,
+    fallbackUrl: 'https://graystudio.github.io/Fracture/index.html',
+    redirectUrl: 'https://google.com',
+    resizable: false,
+    showScrollbars: false,
+    autoRunInIframes: true
+};
+
+function showStatus(message, isError = false) {
+    const statusElement = document.getElementById('statusMessage');
+    statusElement.textContent = message;
+    statusElement.className = `status-message ${isError ? 'error' : 'success'}`;
+    statusElement.style.display = 'block';
+    
+    setTimeout(() => {
+        statusElement.style.display = 'none';
+    }, 3000);
+}
+
+function toggleAutoBlank() {
+    const isEnabled = document.getElementById('autoabToggle').checked;
+    localStorage.setItem('autoab', isEnabled ? 'installed' : 'uninstalled');
+    showStatus(isEnabled ? 'Auto About:Blank enabled' : 'Auto About:Blank disabled');
+}
+
+function saveSettings() {
+    const settings = {
+        windowWidth: parseInt(document.getElementById('windowWidth').value) || DEFAULT_SETTINGS.windowWidth,
+        windowHeight: parseInt(document.getElementById('windowHeight').value) || DEFAULT_SETTINGS.windowHeight,
+        fallbackUrl: document.getElementById('fallbackUrl').value || DEFAULT_SETTINGS.fallbackUrl,
+        redirectUrl: document.getElementById('redirectUrl').value || DEFAULT_SETTINGS.redirectUrl,
+        resizable: document.getElementById('resizableCheck').checked,
+        showScrollbars: document.getElementById('scrollCheck').checked,
+        autoRunInIframes: document.getElementById('autoRunCheck').checked
+    };
+
+    // Validate inputs
+    if (settings.windowWidth < 500 || settings.windowHeight < 400) {
+        showStatus('Window dimensions are too small', true);
+        return;
+    }
+
+    try {
+        new URL(settings.fallbackUrl);
+        new URL(settings.redirectUrl);
+    } catch (e) {
+        showStatus('Invalid URL format', true);
+        return;
+    }
+
+    // Save all settings to localStorage
+    Object.entries(settings).forEach(([key, value]) => {
+        localStorage.setItem(`autoab_${key}`, typeof value === 'boolean' ? value.toString() : value);
+    });
+
+    showStatus('Settings saved successfully');
+}
+
+function resetSettings() {
+    document.getElementById('windowWidth').value = DEFAULT_SETTINGS.windowWidth;
+    document.getElementById('windowHeight').value = DEFAULT_SETTINGS.windowHeight;
+    document.getElementById('fallbackUrl').value = DEFAULT_SETTINGS.fallbackUrl;
+    document.getElementById('redirectUrl').value = DEFAULT_SETTINGS.redirectUrl;
+    document.getElementById('resizableCheck').checked = DEFAULT_SETTINGS.resizable;
+    document.getElementById('scrollCheck').checked = DEFAULT_SETTINGS.showScrollbars;
+    document.getElementById('autoRunCheck').checked = DEFAULT_SETTINGS.autoRunInIframes;
+    
+    saveSettings();
+    showStatus('Settings reset to default');
+}
+
+// Initialize settings on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const isEnabled = localStorage.getItem('autoab') === 'installed';
+    document.getElementById('autoabToggle').checked = isEnabled;
+    
+    // Load saved settings or use defaults
+    document.getElementById('windowWidth').value = localStorage.getItem('autoab_windowWidth') || DEFAULT_SETTINGS.windowWidth;
+    document.getElementById('windowHeight').value = localStorage.getItem('autoab_windowHeight') || DEFAULT_SETTINGS.windowHeight;
+    document.getElementById('fallbackUrl').value = localStorage.getItem('autoab_fallbackUrl') || DEFAULT_SETTINGS.fallbackUrl;
+    document.getElementById('redirectUrl').value = localStorage.getItem('autoab_redirectUrl') || DEFAULT_SETTINGS.redirectUrl;
+    document.getElementById('resizableCheck').checked = localStorage.getItem('autoab_resizable') === 'true' || DEFAULT_SETTINGS.resizable;
+    document.getElementById('scrollCheck').checked = localStorage.getItem('autoab_showScrollbars') === 'true' || DEFAULT_SETTINGS.showScrollbars;
+    document.getElementById('autoRunCheck').checked = localStorage.getItem('autoab_autoRunInIframes') === 'true' || DEFAULT_SETTINGS.autoRunInIframes;
+});
+</script>
+
+<script>
+const DEFAULT_SETTINGS = {
+favicon: 'https://www.google.com/favicon.ico',
+tabName: 'Google'
+};
+
+function showStatus(message, isError = false) {
+const statusElement = document.getElementById('statusMessage');
+statusElement.textContent = message;
+statusElement.className = `status-message ${isError ? 'error' : 'success'}`;
+statusElement.style.display = 'block';
+
+setTimeout(() => {
+    statusElement.style.display = 'none';
+}, 3000);
+}
+
+function updatePreview() {
+const faviconUrl = document.getElementById('faviconInput').value || DEFAULT_SETTINGS.favicon;
+const tabName = document.getElementById('tabNameInput').value || DEFAULT_SETTINGS.tabName;
+
+document.getElementById('faviconPreview').src = faviconUrl;
+document.getElementById('tabNamePreview').textContent = tabName;
+}
+
+function toggleCloaking() {
+const isEnabled = document.getElementById('cloakToggle').checked;
+localStorage.setItem('concloak', isEnabled ? 'installed' : 'uninstalled');
+
+if (isEnabled) {
+    initializeCloaking();
+    showStatus('Cloaking enabled');
+} else {
+    // Reset to default favicon and title
+    updateFavicon(window.location.origin + '/favicon.ico');
+    updateTabName(document.documentElement.getAttribute('data-original-title') || 'Tab Cloaking Settings');
+    showStatus('Cloaking disabled');
+}
+}
+
+function saveSettings() {
+const faviconUrl = document.getElementById('faviconInput').value || DEFAULT_SETTINGS.favicon;
+const tabName = document.getElementById('tabNameInput').value || DEFAULT_SETTINGS.tabName;
+
+localStorage.setItem('faviconCloak', faviconUrl);
+localStorage.setItem('tabNameCloak', tabName);
+
+if (document.getElementById('cloakToggle').checked) {
+    updateFavicon(faviconUrl);
+    updateTabName(tabName);
+}
+
+showStatus('Settings saved successfully');
+}
+
+function resetSettings() {
+document.getElementById('faviconInput').value = DEFAULT_SETTINGS.favicon;
+document.getElementById('tabNameInput').value = DEFAULT_SETTINGS.tabName;
+
+updatePreview();
+saveSettings();
+showStatus('Settings reset to default');
+}
+
+// Initialize settings on page load
+document.addEventListener('DOMContentLoaded', () => {
+// Store original title for later
+document.documentElement.setAttribute('data-original-title', document.title);
+
+// Load saved settings
+const isCloakInstalled = localStorage.getItem('concloak') === 'installed';
+document.getElementById('cloakToggle').checked = isCloakInstalled;
+
+document.getElementById('faviconInput').value = localStorage.getItem('faviconCloak') || DEFAULT_SETTINGS.favicon;
+document.getElementById('tabNameInput').value = localStorage.getItem('tabNameCloak') || DEFAULT_SETTINGS.tabName;
+
+updatePreview();
+
+if (isCloakInstalled) {
+    initializeCloaking();
+}
+});
+
+// Add the original script functions
+function updateFavicon(faviconUrl) {
+let link = document.querySelector("link[rel~='icon']");
+if (!link) {
+    link = document.createElement('link');
+    link.rel = 'icon';
+    document.head.appendChild(link);
+}
+link.href = faviconUrl;
+}
+
+function updateTabName(newName) {
+document.title = newName;
+}
+
+function initializeCloaking() {
+const isCloakInstalled = localStorage.getItem('concloak') === 'installed';
+
+if (!isCloakInstalled) {
+    console.log('Cloaking not installed');
+    return;
+}
+
+const faviconCloak = localStorage.getItem('faviconCloak');
+const tabNameCloak = localStorage.getItem('tabNameCloak');
+
+if (faviconCloak) {
+    updateFavicon(faviconCloak);
+}
+
+if (tabNameCloak) {
+    updateTabName(tabNameCloak);
+}
+}
+</script>
+
+<script>
+const defaultCloakSettings = {
+    imageSrc: "https://example.com/default-cloak.jpg",
+    faviconSrc: "https://example.com/favicon.ico",
+    pageTitle: "Google Classroom",
+    blacklist: ["studentvue", "chat"]
+};
+
+function updateSwitches() {
+    document.getElementById('cloakSwitch').checked = localStorage.getItem('cloak') === 'installed';
+    document.getElementById('protectionSwitch').checked = localStorage.getItem('GGBlock') === 'installed';
+}
+
+function toggleCloak() {
+    const isEnabled = document.getElementById('cloakSwitch').checked;
+    localStorage.setItem('cloak', isEnabled ? 'installed' : 'uninstalled');
+}
+
+function toggleTabProtection() {
+    const isEnabled = document.getElementById('protectionSwitch').checked;
+    localStorage.setItem('GGBlock', isEnabled ? 'installed' : 'uninstalled');
+}
+
+function saveCloakSettings() {
+    const settings = {
+        imageSrc: document.getElementById('cloakImageSrc').value || defaultCloakSettings.imageSrc,
+        faviconSrc: document.getElementById('cloakFaviconSrc').value || defaultCloakSettings.faviconSrc,
+        pageTitle: document.getElementById('cloakPageTitle').value || defaultCloakSettings.pageTitle,
+        blacklist: document.getElementById('cloakBlacklist').value.split(',').map(s => s.trim())
+    };
+
+    Object.entries(settings).forEach(([key, value]) => {
+        localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+    });
+
+    localStorage.setItem('cloak', 'installed');
+    document.getElementById('cloakSwitch').checked = true;
+    alert('Settings saved successfully!');
+}
+
+function setDefaultCloakSettings() {
+    Object.entries(defaultCloakSettings).forEach(([key, value]) => {
+        localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+        const input = document.getElementById('cloak' + key.charAt(0).toUpperCase() + key.slice(1));
+        if (input) {
+            input.value = Array.isArray(value) ? value.join(', ') : value;
+        }
+    });
+    
+    localStorage.setItem('cloak', 'installed');
+    document.getElementById('cloakSwitch').checked = true;
+    alert('Default settings restored!');
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    updateSwitches();
+    
+    // Load saved settings into inputs
+    const settings = ['ImageSrc', 'FaviconSrc', 'PageTitle', 'Blacklist'];
+    settings.forEach(setting => {
+        const value = localStorage.getItem(setting.toLowerCase());
+        if (value) {
+            document.getElementById('cloak' + setting).value = 
+                setting === 'Blacklist' ? JSON.parse(value).join(', ') : value;
+        }
+    });
+});
+</script>
+</body>
+</html>

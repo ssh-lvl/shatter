@@ -8,16 +8,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StudentVUE</title>
   <style>
-    body, html {
+  <style>
+  
+  body, html {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
-      background-color: #fff;
-    }
-
-    #cover {
+      background-color: var(--color-major);
+  }
+  
+  #cover {
       position: fixed;
       top: 0;
       left: 0;
@@ -29,69 +31,377 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
-    }
-
-    .loadButton {
-  padding: 10px 20px;
-  font-size: 18px;
-  background-color: var(--color-button);
-  color: var(--color-text);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin: 5px;
-  display: inline-block;
-  text-align: center;
-}
-
-
-    .loadButton:hover {
+  }
+  
+  .loadButton {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: var(--color-button);
+      color: var(--color-text);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 10px;
+      display: inline-block;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+  }
+  
+  .loadButton:hover {
       background-color: var(--color-button-hover);
-    }
-
-    iframe {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(110, 8, 226, 0.3);
+  }
+  
+  .loadButton::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+  }
+  
+  .loadButton:active::before {
+      width: 300px;
+      height: 300px;
+  }
+  
+  iframe {
       width: 100%;
       height: 100%;
       border: none;
-    }
+      opacity: 0;
+      transition: opacity 0.5s ease;
+  }
+  
+  iframe.visible {
+      opacity: 1;
+  }
+  
+  /* Added animation for button entrance */
+  @keyframes buttonFadeIn {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+  
+  .loadButton {
+      animation: buttonFadeIn 0.5s ease forwards;
+  }
+  
+  .loadButton:nth-child(1) { animation-delay: 0.1s; }
+  .loadButton:nth-child(2) { animation-delay: 0.2s; }
+  .loadButton:nth-child(3) { animation-delay: 0.3s; }
+  .loadButton:nth-child(4) { animation-delay: 0.4s; }
+  
+  .addLinkForm {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px;
+      padding: 20px;
+      background: var(--color-minor-lesser);
+      border-radius: 8px;
+      max-width: 400px;
+  }
+  
+  .addLinkForm input {
+      padding: 10px;
+      border: 1px solid var(--color-accent);
+      border-radius: 4px;
+      background: var(--color-major-lesser);
+      color: var(--color-text);
+  }
+  
+  .addLinkForm input::placeholder {
+      color: var(--color-text-muted);
+  }
+  
+  .manageLinks {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      background: var(--color-button);
+      color: var(--color-text);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+  
+  .manageLinks:hover {
+      background: var(--color-button-hover);
+  }
+  
+  .loadButton.delete-mode {
+      border: 2px solid #ff0000;
+      animation: pulse 1s infinite;
+  }
+  
+  @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+  }
+  
+  .deleteButton {
+      background-color: #ff3333;
+      padding: 10px;
+      position: absolute;
+      top: 60px;
+      right: 10px;
+      color: var(--color-text);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+  
+  .deleteButton:hover {
+      background-color: #ff6666;
+  }
   </style>
-</head>
-<body>
+  </head>
+  <body>
   <div id="cover"></div>
-
-  <iframe id="contentFrame" style="display:none;"></iframe>
-
+  <iframe id="contentFrame" style="display:none;" sandbox="allow-scripts allow-forms allow-same-origin"></iframe>
+  <iframe id="checkFrame" style="display:none;"></iframe>
+  
   <script>
-    // Modular links object
-    const links = {
+  const defaultLinks = {
       'Lucid (Contains Ads)': 'https://luhtrissy.com/',
       'Rammerhead 1': 'https://sisstudent.fcps.ehcp.eu/',
       'Rammerhead 2': 'https://elajournals.20pack.com',
       'Rammerhead 3': 'https://elajournals.zolik.com/'
-
-    };
-
-    // Function to create buttons
-    function createButtons() {
+  };
+  
+  let links = {...defaultLinks};
+  let deleteMode = false;
+  
+  // Load saved links from localStorage
+  function loadSavedLinks() {
+      const savedLinks = localStorage.getItem('customLinks');
+      if (savedLinks) {
+          links = {...defaultLinks, ...JSON.parse(savedLinks)};
+      }
+  }
+  
+  function saveLinks() {
+      const customLinks = {};
+      Object.entries(links).forEach(([name, url]) => {
+          if (!Object.values(defaultLinks).includes(url)) {
+              customLinks[name] = url;
+          }
+      });
+      localStorage.setItem('customLinks', JSON.stringify(customLinks));
+  }
+  
+  function createButtons() {
       const cover = document.getElementById('cover');
       const contentFrame = document.getElementById('contentFrame');
-
-      for (const [name, url] of Object.entries(links)) {
-        const button = document.createElement('button');
-        button.textContent = `${name}`;
-        button.className = 'loadButton';
-        button.addEventListener('click', () => {
-          contentFrame.src = url;
-          contentFrame.style.display = 'block';
-          cover.style.display = 'none';
-        });
-        cover.appendChild(button);
+      
+      // Clear existing buttons
+      while (cover.firstChild) {
+          cover.removeChild(cover.firstChild);
       }
-    }
-
-    // Create buttons immediately
-    createButtons();
+  
+      const manageButton = document.createElement('button');
+      manageButton.textContent = 'Add Link';
+      manageButton.className = 'manageLinks';
+      manageButton.addEventListener('click', showAddLinkForm);
+      cover.appendChild(manageButton);
+  
+      const checkButton = document.createElement('button');
+      checkButton.textContent = 'Check Links';
+      checkButton.className = 'loadButton';
+      checkButton.style.position = 'absolute';
+      checkButton.style.top = '10px';
+      checkButton.style.left = '10px';
+      checkButton.addEventListener('click', checkLinks);
+      cover.appendChild(checkButton);
+  
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete Link';
+      deleteButton.className = 'deleteButton';
+      deleteButton.addEventListener('click', toggleDeleteMode);
+      cover.appendChild(deleteButton);
+  
+      const form = document.createElement('div');
+      form.className = 'addLinkForm';
+      form.style.display = 'none';
+      form.innerHTML = `
+          <input type="text" id="linkName" placeholder="Link Name">
+          <input type="url" id="linkUrl" placeholder="Link URL">
+          <button class="loadButton" onclick="addNewLink()">Add Link</button>
+      `;
+      cover.appendChild(form);
+  
+      Object.entries(links).forEach(([name, url], index) => {
+          const button = document.createElement('button');
+          button.textContent = name;
+          button.className = 'loadButton';
+          button.style.animationDelay = `${(index + 1) * 0.1}s`;
+          
+          button.addEventListener('click', () => {
+              if (deleteMode && !Object.keys(defaultLinks).includes(name)) {
+                  delete links[name];
+                  saveLinks();
+                  createButtons();
+                  deleteMode = false;
+              } else {
+                  contentFrame.src = url;
+                  contentFrame.style.display = 'block';
+                  cover.style.transition = 'opacity 0.5s ease';
+                  cover.style.opacity = '0';
+                  
+                  setTimeout(() => {
+                      contentFrame.classList.add('visible');
+                      setTimeout(() => {
+                          cover.style.display = 'none';
+                      }, 500);
+                  }, 100);
+              }
+          });
+          
+          cover.appendChild(button);
+      });
+  }
+  
+  function showAddLinkForm() {
+      const form = document.querySelector('.addLinkForm');
+      form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+  }
+  
+  function addNewLink() {
+      const nameInput = document.getElementById('linkName');
+      const urlInput = document.getElementById('linkUrl');
+      
+      if (nameInput.value && urlInput.value) {
+          links[nameInput.value] = urlInput.value;
+          saveLinks();
+          createButtons();
+          
+          // Clear inputs
+          nameInput.value = '';
+          urlInput.value = '';
+          
+          // Hide form
+          document.querySelector('.addLinkForm').style.display = 'none';
+      }
+  }
+  
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+      loadSavedLinks();
+      createButtons();
+      createAmbientBackground();
+  });
+  
+  function toggleDeleteMode() {
+      deleteMode = !deleteMode;
+      const buttons = document.querySelectorAll('.loadButton');
+      buttons.forEach(button => {
+          if (!Object.keys(defaultLinks).includes(button.textContent)) {
+              button.classList.toggle('delete-mode', deleteMode);
+          }
+      });
+  }
+  
+  function createAmbientBackground() {
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("style", "position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;");
+      
+      for(let i = 0; i < 50; i++) {
+          const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("r", Math.random() * 2);
+          circle.setAttribute("cx", Math.random() * 100 + "%");
+          circle.setAttribute("cy", Math.random() * 100 + "%");
+          circle.setAttribute("fill", "rgba(110, 8, 226, 0.2)");
+          
+          const animate = document.createElementNS("http://www.w3.org/2000/svg", "animate");
+          animate.setAttribute("attributeName", "opacity");
+          animate.setAttribute("values", "0.2;0.5;0.2");
+          animate.setAttribute("dur", (Math.random() * 3 + 2) + "s");
+          animate.setAttribute("repeatCount", "indefinite");
+          
+          circle.appendChild(animate);
+          svg.appendChild(circle);
+      }
+      
+      cover.insertBefore(svg, cover.firstChild);
+  }
+  
+  async function checkLinks() {
+      const checkFrame = document.getElementById('checkFrame');
+      const buttons = Array.from(document.querySelectorAll('.loadButton')).filter(btn => btn.textContent !== 'Check Links' && btn.textContent !== 'Add Link');
+      
+      for (const button of buttons) {
+          const url = links[button.textContent];
+          button.style.border = '';
+          button.style.boxShadow = '';
+          
+          try {
+              checkFrame.src = url;
+              
+              const result = await new Promise((resolve) => {
+                  let timeoutId = setTimeout(() => {
+                      resolve('timeout');
+                  }, 3000);
+                  
+                  const checkInterval = setInterval(() => {
+                      try {
+                          if (checkFrame.contentWindow.location.href.includes('blocked.goguardian.com')) {
+                              clearTimeout(timeoutId);
+                              clearInterval(checkInterval);
+                              resolve('blocked');
+                          }
+                      } catch (e) {
+                          // Handle cross-origin errors silently
+                      }
+                  }, 100);
+  
+                  checkFrame.onload = () => {
+                      clearTimeout(timeoutId);
+                      clearInterval(checkInterval);
+                      resolve('success');
+                  };
+  
+                  checkFrame.onerror = () => {
+                      clearTimeout(timeoutId);
+                      clearInterval(checkInterval);
+                      resolve('error');
+                  };
+              });
+  
+              if (result === 'blocked') {
+                  document.querySelector('.loadButton').style.display = 'none';
+                  break;
+              } else if (result === 'success') {
+                  button.style.border = '2px solid #00ff00';
+                  button.style.boxShadow = '0 0 10px rgba(0, 255, 0, 0.3)';
+              } else {
+                  button.style.border = '2px solid #ff0000';
+                  button.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.3)';
+              }
+          } catch (error) {
+              button.style.border = '2px solid #ff0000';
+              button.style.boxShadow = '0 0 10px rgba(255, 0, 0, 0.3)';
+          }
+          
+          checkFrame.src = 'about:blank';
+      }
+  }
   </script>
-</body>
-</html>
+  </body>
+  </html>

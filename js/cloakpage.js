@@ -197,3 +197,43 @@ if (localStorage.getItem('cloak') === 'installed') {
         loadSettingsIntoInputs();
     }
 }
+
+// Function to update favicon
+function updateFavicon(faviconUrl) {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+    }
+    link.href = faviconUrl;
+}
+
+// Function to update tab name
+function updateTabName(newName) {
+    document.title = newName;
+}
+
+// Main function to check and apply cloaking
+function initializeCloaking() {
+    // Check if cloaking is installed
+    const isCloakInstalled = localStorage.getItem('concloak') === 'installed';
+    
+    if (!isCloakInstalled) {
+        console.log('Cloaking not installed');
+        return;
+    }
+
+    // Get cloaking values
+    const faviconCloak = localStorage.getItem('faviconCloak');
+    const tabNameCloak = localStorage.getItem('tabNameCloak');
+
+    // Apply cloaking if values exist
+    if (faviconCloak) {
+        updateFavicon(faviconCloak);
+    }
+
+    if (tabNameCloak) {
+        updateTabName(tabNameCloak);
+    }
+}

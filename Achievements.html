@@ -2,97 +2,83 @@
   <script src="js/chromebookcheck.js"></script>
   <script src="js/background-switcher.js"></script>
   <link rel="icon" type="image/png" href="favicon.png">
+  <script src="js/theme-switcher.js"></script>
+  <link rel="stylesheet" href="css/theme-index.css">
   <script src="js/navgen.js"></script>
   <script src="js/lastpage.js"></script>
   <script src="js/ErudaConsole.js"></script>
     <title>Fracture | Achievements</title>
     <style>
-:root {
-  /* Primary Background Colors */
-  --bg-color: #121212;              /* Main background */
-  --container-bg: #1e1e1e;          /* Container background */
-  --achievement-bg: #292929;        /* Achievement background */
-
-  /* Text and Highlight Colors */
-  --text-color: #f5f5f5;            /* Primary text color */
-  --highlight-color: #bb86fc;       /* Highlight and accent color */
-  --achievement-border: #6200ee;    /* Border color for achievements */
-
-  /* Button Colors */
-  --button-bg: #3700b3;             /* Default button background */
-  --button-hover: #6200ee;          /* Button background on hover */
-
-  /* Opacity Levels */
-  --locked-opacity: 0.4;            /* Opacity for locked items */
-}
-
-
 body {
-
-  background-color: var(--bg-color);
-  color: var(--text-color);
-
+  background-color: var(--color-background);
+  color: var(--color-text);
 }
-    
-      .achivements-wrapper {
-        font-family: Arial, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-      }
-      .container {
-        background-color: var(--container-bg);
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(157, 78, 221, 0.2);
-        padding: 20px;
-        width: 80%;
-        max-width: 800px;
-        margin: 20px 0;
-      }
-      h1, h2 {
-        color: var(--highlight-color);
-        text-align: center;
-      }
-      .achievement-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-      }
-      .achievement {
-        background-color: var(--achievement-bg);
-        border: 1px solid var(--achievement-border);
-        border-radius: 5px;
-        padding: 15px;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .achievement:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
-      }
-      .achievement-icon {
-        font-size: 48px;
-        margin-bottom: 10px;
-      }
-      .achievement-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: var(--highlight-color);
-      }
-      .achievement-description {
-        font-size: 14px;
-        color: var(--text-color);
-      }
-      .achievement.locked {
-        opacity: var(--locked-opacity);
-      }
-      .achievement.locked {
-  position: relative; /* Ensure the parent element is positioned relative */
+
+.achivements-wrapper {
+  font-family: Arial, sans-serif;
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: var(--color-major);
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--color-minor-lesser);
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  margin: 20px 0;
+}
+
+h1, h2 {
+  color: var(--color-accent-games);
+  text-align: center;
+}
+
+.achievement-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.achievement {
+  background-color: var(--color-major-lesser);
+  border: 1px solid var(--color-minor);
+  border-radius: 5px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.achievement:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--color-accent2);
+}
+
+.achievement-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.achievement-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--color-accent-games);
+}
+
+.achievement-description {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.achievement.locked {
+  opacity: 0.5;
+  position: relative;
 }
 
 .achievement.locked .achievement-icon::after {
@@ -103,15 +89,14 @@ body {
   right: -10px;
 }
 
-
-      pre {
-        background-color: #2a2a4a;
-        border: 1px solid var(--achievement-border);
-        border-radius: 5px;
-        padding: 15px;
-        overflow-x: auto;
-        color: var(--text-color);
-      }
+pre {
+  background-color: var(--color-major-lesser);
+  border: 1px solid var(--color-minor);
+  border-radius: 5px;
+  padding: 15px;
+  overflow-x: auto;
+  color: var(--color-text);
+}
     </style>
 
 

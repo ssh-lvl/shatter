@@ -130,3 +130,11 @@ document.addEventListener('DOMContentLoaded', function() {
       loadEruda();
     }
   });
+
+  window.addEventListener("beforeunload", function (event) {
+    // Set a message to display (some browsers may ignore this)
+    const message = "Are you sure you want to leave? Your changes may not be saved.";
+    event.preventDefault(); // Required for some browsers
+    event.returnValue = message; // Standard way to set a message
+    return message; // For older browsers
+});

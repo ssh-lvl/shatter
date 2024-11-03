@@ -17,7 +17,7 @@ function getUrlLabel() {
     const currentUrl = window.location.href;
     if (currentUrl.startsWith('file:')) {
         return '(File)';
-    } else if (currentUrl.startsWith('https://graystuido.github.io/')) {
+    } else if (currentUrl.startsWith('https://gragin0.github.io/')) {
         return '(Yggdrasil)';
     } else {
         return '(Branch)';
