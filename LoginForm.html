@@ -2,7 +2,7 @@
   <script src="js/chromebookcheck.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fracture | Login Form</title>
+  <title>shatter | Login Form</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -166,11 +166,11 @@
         <button onclick="showSection1()" data-en="Back" data-es="Atrás" data-ru="Назад" data-uk="Назад">Back</button>
       </div>
       <div id="emailSection" class="hidden">
-        <p data-en="If the automatic email doesn't work, send us one with the header/title 'Fracture login request' then attach the zip file" 
-           data-es="Si el correo automático no funciona, envíenos uno con el encabezado/título 'Solicitud de inicio de sesión de Fracture' y adjunte el archivo zip" 
-           data-ru="Если автоматическая отправка электронной почты не работает, отправьте нам письмо с заголовком 'Запрос на вход в Fracture' и прикрепите zip-файл" 
-           data-uk="Якщо автоматична електронна пошта не працює, надішліть нам лист із заголовком 'Запит на вхід до Fracture' та прикріпіть zip-файл">
-          If the automatic email doesn't work, send us one with the header/title 'Fracture login request' then attach the zip file
+        <p data-en="If the automatic email doesn't work, send us one with the header/title 'shatter login request' then attach the zip file" 
+           data-es="Si el correo automático no funciona, envíenos uno con el encabezado/título 'Solicitud de inicio de sesión de shatter' y adjunte el archivo zip" 
+           data-ru="Если автоматическая отправка электронной почты не работает, отправьте нам письмо с заголовком 'Запрос на вход в shatter' и прикрепите zip-файл" 
+           data-uk="Якщо автоматична електронна пошта не працює, надішліть нам лист із заголовком 'Запит на вхід до shatter' та прикріпіть zip-файл">
+          If the automatic email doesn't work, send us one with the header/title 'shatter login request' then attach the zip file
         </p>
         <button onclick="sendEmail()" data-en="Send Email" data-es="Enviar Correo" data-ru="Отправить Письмо" data-uk="Надіслати Лист">Send Email</button>
         <p>sshlvl.contact@gmail.com</p>
@@ -416,7 +416,7 @@
           saveAs(content, zipFileName);
           
           // Open email client
-          const subject = "Fracture login request";
+          const subject = "shatter login request";
           const body = getCurrentLanguage() === 'en' ? `Please find attached the login request package for ${data.firstName} ${data.lastName}.` :
                        getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${data.firstName} ${data.lastName}.` :
                        getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${data.firstName} ${data.lastName}.` :
@@ -433,7 +433,7 @@
       function sendEmail() {
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
-        const subject = "Fracture login request";
+        const subject = "shatter login request";
         const body = getCurrentLanguage() === 'en' ? `Please find attached the login request package for ${firstName} ${lastName}.` :
                      getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${firstName} ${lastName}.` :
                      getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${firstName} ${lastName}.` :
