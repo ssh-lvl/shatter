@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "Canny",
         "Uncanny",
         "Making the mother of all omelets here Jack. Can't fret over every egg",
-        "Ultra Rare Splash Text",
+        "Are you a contruction worker? because you are building.",
         "Big Vanilla",
         "Jumbo Jorts",
         "infinite games, but no games",
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "Life is short, but my attention span is even shorter",
         "PodPopular or go home",
         "be here or be square",
-        "I am square"
+        "I am square",
         "████████████████",
         "Why So Serious",
         "Big Update When??",
