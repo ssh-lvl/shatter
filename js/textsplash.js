@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
         "Ultra Rare Splash Text",
         "Big Vanilla",
         "Jumbo Jorts",
+        "infinite games, but no games",
+        "unlimited bacon, but no games",
         "Does He Know?",
         "number 15, burger king foot lettuce, this is the lettuce you eat when you get a burger at burger king",
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
