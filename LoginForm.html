@@ -160,9 +160,7 @@
       </div>
       <div class="form-section hidden" id="section2">
         <input type="text" id="firstName" data-en="First Name (required)" data-es="Nombre (obligatorio)" data-ru="Имя (обязательно)" data-uk="Ім'я (обов'язково)" placeholder="First Name (required)" required>
-        <input type="text" id="middleName" data-en="Middle Name (optional)" data-es="Segundo Nombre (opcional)" data-ru="Отчество (необязательно)" data-uk="По батькові (необов'язково)" placeholder="Middle Name (optional)">
         <input type="text" id="lastName" data-en="Last Name (required)" data-es="Apellido (obligatorio)" data-ru="Фамилия (обязательно)" data-uk="Прізвище (обов'язково)" placeholder="Last Name (required)" required>
-        <input type="text" id="studentId" data-en="Student ID (optional)" data-es="ID de Estudiante (opcional)" data-ru="ID Студента (необязательно)" data-uk="ID Студента (необов'язково)" placeholder="Student ID (optional)">
         <input type="email" id="schoolEmail" data-en="School Email (required)" data-es="Correo Escolar (obligatorio)" data-ru="Школьная Почта (обязательно)" data-uk="Шкільна Пошта (обов'язково)" placeholder="School Email (required)" required>
         <button onclick="generateLogin()" data-en="Generate Login" data-es="Generar Inicio de Sesión" data-ru="Создать Логин" data-uk="Створити Логін">Generate Login</button>
         <button onclick="showSection1()" data-en="Back" data-es="Atrás" data-ru="Назад" data-uk="Назад">Back</button>
@@ -175,7 +173,7 @@
           If the automatic email doesn't work, send us one with the header/title 'Fracture login request' then attach the zip file
         </p>
         <button onclick="sendEmail()" data-en="Send Email" data-es="Enviar Correo" data-ru="Отправить Письмо" data-uk="Надіслати Лист">Send Email</button>
-        <p>fracture.contact@aol.com</p>
+        <p>sshlvl.contact@gmail.com</p>
       </div>
     </div>
   
@@ -301,9 +299,7 @@
         const username = document.getElementById('username').value;
         const password = passwordInput.value;
         const firstName = document.getElementById('firstName').value;
-        const middleName = document.getElementById('middleName').value;
         const lastName = document.getElementById('lastName').value;
-        const studentId = document.getElementById('studentId').value;
         const schoolEmail = document.getElementById('schoolEmail').value;
   
         if (!username || !password || !firstName || !lastName || !schoolEmail) {
@@ -334,9 +330,7 @@
           username: username,
           password: password,
           firstName: firstName,
-          middleName: middleName,
           lastName: lastName,
-          studentId: studentId,
           schoolEmail: schoolEmail,
           profilePicture: localStorage.getItem('profilePicture'),
           schoolPhoto: localStorage.getItem('schoolPhoto')
@@ -367,18 +361,10 @@
                   getCurrentLanguage() === 'es' ? "Nombre" :
                   getCurrentLanguage() === 'ru' ? "Имя" :
                   "Ім'я"}: ${data.firstName}`, 20, 60);
-        doc.text(`${getCurrentLanguage() === 'en' ? "Middle Name" :
-                  getCurrentLanguage() === 'es' ? "Segundo Nombre" :
-                  getCurrentLanguage() === 'ru' ? "Отчество" :
-                  "По батькові"}: ${data.middleName || 'N/A'}`, 20, 70);
         doc.text(`${getCurrentLanguage() === 'en' ? "Last Name" :
                   getCurrentLanguage() === 'es' ? "Apellido" :
                   getCurrentLanguage() === 'ru' ? "Фамилия" :
                   "Прізвище"}: ${data.lastName}`, 20, 80);
-        doc.text(`${getCurrentLanguage() === 'en' ? "Student ID" :
-                  getCurrentLanguage() === 'es' ? "ID de Estudiante" :
-                  getCurrentLanguage() === 'ru' ? "ID Студента" :
-                  "ID Студента"}: ${data.studentId || 'N/A'}`, 20, 90);
         doc.text(`${getCurrentLanguage() === 'en' ? "School Email" :
                   getCurrentLanguage() === 'es' ? "Correo Escolar" :
                   getCurrentLanguage() === 'ru' ? "Школьная Почта" :
@@ -452,13 +438,13 @@
                      getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${firstName} ${lastName}.` :
                      getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${firstName} ${lastName}.` :
                      `Будь ласка, знайдіть прикріплений пакет запиту на вхід для ${firstName} ${lastName}.`;
-        const mailtoLink = `mailto:fracture.contact@aol.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         window.open(mailtoLink, '_blank');
       }
   
       // Load saved data from localStorage
       window.addEventListener('load', () => {
-        const savedFields = ['username', 'password', 'firstName', 'middleName', 'lastName', 'studentId', 'schoolEmail'];
+        const savedFields = ['username', 'password', 'firstName', 'lastName', 'schoolEmail'];
         savedFields.forEach(field => {
           const value = localStorage.getItem(field);
           if (value) document.getElementById(field).value = value;
