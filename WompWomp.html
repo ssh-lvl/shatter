@@ -5,22 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>You're not supposed to be here!</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        }
-        h1 {text-align: center;}
-        h2 {text-align: center;}
-    </style>
-</head>
-<body>
-    <h1></h1>
-    <h2>get out...</h2>
-    <a id="navbutton2" class="vbutton" href="index.html">Ok</a>
-</body>
+<style>
+.container {
+  height: 200px;
+  position: relative;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+</style>
+
+<div class="container">
+  <div class="center">
+  	<h2>Get out...</h2>
+    <button>Centered Button</button>
+  </div>
+</div>
 </html>
