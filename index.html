@@ -462,7 +462,7 @@ body {
         } else if (url.value.substring(0, 7) == 'http://'){
         	url.value = 'https://' + url.value.split('http://').pop();
         };
-        win = window.open('about:blank', '_blank', 'height=600,width=800,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
+        win = window.open('about:blank', 'about:blank', 'height=600,width=800,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
         win.document.body.style.margin = "0";
         win.document.body.style.height = "100vh";
         var iframe = win.document.createElement("iframe");
@@ -505,7 +505,7 @@ function initializeCloak(buttonId = "ab-cloak-button") {
 
     function cloakPage(targetUrl) {
         try {
-            var win = window.open('about:blank', '_blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
+            var win = window.open('about:blank', 'about:blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
             if (!win) throw new Error("Popup blocked");
             
             win.document.body.style.margin = "0";
@@ -615,7 +615,7 @@ if (!shouldPreventCloak()) {
         url = "https://graystudio.github.io/Fracture/index.html";
     }
 
-    var win = window.open('about:blank', '_blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
+    var win = window.open('about:blank', 'about:blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
     win.document.body.style.margin = "0";
     win.document.body.style.height = "100vh";
     var iframe = win.document.createElement("iframe");
@@ -632,7 +632,7 @@ if (!shouldPreventCloak()) {
     var closed = window.close();
     if (!closed) {
         // If window.close() fails, redirect to Google
-        window.location.href = "_blank";
+        window.location.href = "about:blank";
     }
 };
     </script>
@@ -659,7 +659,7 @@ if (!shouldPreventCloak()) {
             url = "https://graystudio.github.io/Fracture/index.html";
         }
         
-        var win = window.open('about:blank', '_blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
+        var win = window.open('about:blank', 'about:blank', 'height=800,width=1080,resizable=no,scrollbars=no,status=no,toolbar=no,location=no,menubar=no');
         win.document.body.style.margin = "0";
         win.document.body.style.height = "100vh";
         var iframe = win.document.createElement("iframe");
@@ -676,7 +676,7 @@ if (!shouldPreventCloak()) {
         var closed = window.close();
         if (!closed) {
             // If window.close() fails, redirect to Google
-            window.location.href = "_blank";
+            window.location.href = "about:blank";
         }
     }
 
