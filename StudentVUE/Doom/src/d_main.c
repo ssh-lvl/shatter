@@ -50,7 +50,6 @@
 #include "m_controls.h"
 #include "m_misc.h"
 #include "m_menu.h"
-#include "p_saveg.h"
 
 #include "i_endoom.h"
 #include "i_joystick.h"
@@ -87,7 +86,7 @@ void D_DoomLoop (void);
 
 // Location where savegames are stored
 
-char *          savegamedir;
+//char *          savegamedir;
 
 // location of IWAD and WAD files
 
@@ -356,8 +355,8 @@ void D_BindVariables(void)
     M_BindVariable("screenblocks",           &screenblocks);
     M_BindVariable("detaillevel",            &detailLevel);
     M_BindVariable("snd_channels",           &snd_channels);
-    M_BindVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
-    M_BindVariable("vanilla_demo_limit",     &vanilla_demo_limit);
+    //M_BindVariable("vanilla_savegame_limit", &vanilla_savegame_limit);
+    //M_BindVariable("vanilla_demo_limit",     &vanilla_demo_limit);
     M_BindVariable("show_endoom",            &show_endoom);
 
     // Multiplayer chat macros
@@ -1568,9 +1567,9 @@ void D_DoomMain (void)
     else
 #endif
 */
-    {
-        savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission));
-    }
+   // {
+      //  savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission));
+   // }
 
     // Check for -file in shareware
     if (modifiedgame)
@@ -1759,7 +1758,7 @@ void D_DoomMain (void)
     // Load the game in slot s.
     //
 
-    p = M_CheckParmWithArgs("-loadgame", 1);
+    //p = M_CheckParmWithArgs("-loadgame", 1);
     
     if (p)
     {
@@ -1838,11 +1837,11 @@ void D_DoomMain (void)
 		D_DoomLoop ();  // never returns
     }
 
-    if (startloadgame >= 0)
-    {
-        M_StringCopy(file, P_SaveGameFile(startloadgame), sizeof(file));
-        G_LoadGame(file);
-    }
+  //  if (startloadgame >= 0)
+   // {
+        //M_StringCopy(file, P_SaveGameFile(startloadgame), sizeof(file));
+       // G_LoadGame(file);
+    //}
 
     if (gameaction != ga_loadgame )
     {
