@@ -176,7 +176,7 @@
         <p>sshlvl.contact@gmail.com</p>
       </div>
     </div>
-  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -294,10 +294,14 @@
         document.getElementById('section2').classList.remove('hidden');
         document.getElementById('emailSection').classList.add('hidden');
       }
-  
+  function hashpass(pass) {
+  var hashObj = new jsSHA("SHA-512", "TEXT", {numRounds: 1});
+  var hash = hashObj.getHash(pass);
+  return hash;
+}
       function generateLogin() {
         const username = document.getElementById('username').value;
-        const password = passwordInput.value;
+        const password = hashpass(passwordInput.value);
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const schoolEmail = document.getElementById('schoolEmail').value;
