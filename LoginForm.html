@@ -1,6 +1,5 @@
 <html><head>
   <script src="js/chromebookcheck.js"></script>
-  <script src="js/Master.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>shatter | Login Form</title>
@@ -200,14 +199,7 @@
   
       profileFileInput.addEventListener('change', (e) => handleImageUpload(e, profilePicture, 'profilePicture'));
       schoolPhotoInput.addEventListener('change', (e) => handleImageUpload(e, schoolPhoto, 'schoolPhoto'));
-  async function hashPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
-    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    return hashHex; // Return the hashed password as a hex string
-  }
+  
       function handleImageUpload(e, imgContainer, storageKey) {
         const file = e.target.files[0];
         if (file) {
@@ -302,10 +294,10 @@
         document.getElementById('section2').classList.remove('hidden');
         document.getElementById('emailSection').classList.add('hidden');
       }
-  const hashedPassword = await hashPassword(password);
+  
       function generateLogin() {
         const username = document.getElementById('username').value;
-        const password = hashedPassword;
+        const password = passwordInput.value;
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const schoolEmail = document.getElementById('schoolEmail').value;
@@ -336,7 +328,7 @@
   
         const loginData = {
           username: username,
-          password: hashedPassword,
+          password: password,
           firstName: firstName,
           lastName: lastName,
           schoolEmail: schoolEmail,
@@ -351,14 +343,32 @@
       async function generatePDFAndZip(data) {
         const doc = new jsPDF();
         doc.setFontSize(16);
-        doc.text("Student Login Information", 20, 20);
-       
+        doc.text(getCurrentLanguage() === 'en' ? "Student Login Information" :
+                 getCurrentLanguage() === 'es' ? "Información de Inicio de Sesión del Estudiante" :
+                 getCurrentLanguage() === 'ru' ? "Информация о Входе Студента" :
+                 "Інформація про Вхід Студента", 20, 20);
+        
         doc.setFontSize(12);
-        doc.text(`Username: ${data.username}`, 20, 40);
-        doc.text(`Password: ${data.password}`, 20, 50);
-        doc.text(`First Name: ${data.firstName}`, 20, 60);
-        doc.text(`Last Name: ${data.lastName}`, 20, 80);
-        doc.text(`School Email: ${data.schoolEmail}`, 20, 100);
+        doc.text(`${getCurrentLanguage() === 'en' ? "Username" :
+                  getCurrentLanguage() === 'es' ? "Nombre de Usuario" :
+                  getCurrentLanguage() === 'ru' ? "Имя пользователя" :
+                  "Ім'я користувача"}: ${data.username}`, 20, 40);
+        doc.text(`${getCurrentLanguage() === 'en' ? "Password" :
+                  getCurrentLanguage() === 'es' ? "Contraseña" :
+                  getCurrentLanguage() === 'ru' ? "Пароль" :
+                  "Пароль"}: ${data.password}`, 20, 50);
+        doc.text(`${getCurrentLanguage() === 'en' ? "First Name" :
+                  getCurrentLanguage() === 'es' ? "Nombre" :
+                  getCurrentLanguage() === 'ru' ? "Имя" :
+                  "Ім'я"}: ${data.firstName}`, 20, 60);
+        doc.text(`${getCurrentLanguage() === 'en' ? "Last Name" :
+                  getCurrentLanguage() === 'es' ? "Apellido" :
+                  getCurrentLanguage() === 'ru' ? "Фамилия" :
+                  "Прізвище"}: ${data.lastName}`, 20, 80);
+        doc.text(`${getCurrentLanguage() === 'en' ? "School Email" :
+                  getCurrentLanguage() === 'es' ? "Correo Escolar" :
+                  getCurrentLanguage() === 'ru' ? "Школьная Почта" :
+                  "Шкільна Пошта"}: ${data.schoolEmail}`, 20, 100);
         
         doc.text(getCurrentLanguage() === 'en' ? "This information is to make sure you are a student enrolled at Clackamas Highschool." :
                  getCurrentLanguage() === 'es' ? "Esta información es para asegurarnos de que eres un estudiante matriculado en Clackamas Highschool." :
@@ -371,12 +381,18 @@
         
         if (data.profilePicture) {
           doc.addImage(data.profilePicture, 'JPEG', 20, 150, 50, 50);
-          doc.text("Profile Picture", 20, 210);
+          doc.text(getCurrentLanguage() === 'en' ? "Profile Picture" :
+                   getCurrentLanguage() === 'es' ? "Foto de Perfil" :
+                   getCurrentLanguage() === 'ru' ? "Фото Профиля" :
+                   "Фото Профілю", 20, 210);
         }
         
         if (data.schoolPhoto) {
           doc.addImage(data.schoolPhoto, 'JPEG', 100, 150, 50, 50);
-          doc.text("School Photo", 100, 210);
+          doc.text(getCurrentLanguage() === 'en' ? "School Photo" :
+                   getCurrentLanguage() === 'es' ? "Foto Escolar" :
+                   getCurrentLanguage() === 'ru' ? "Школьное Фото" :
+                   "Шкільне Фото", 100, 210);
         }
         
         const pdfName = `${data.lastName}_${data.firstName}_Login_Info.pdf`;
