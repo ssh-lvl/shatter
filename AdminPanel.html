@@ -106,11 +106,6 @@ button:hover {
   </div>
 </div>
 <script>
-let override = false;
-document.addEventListener('keydown', overrideAdmin);
-function overrideAdmin() {
-  override = true;
-}
 const togglePremiumBtn = document.getElementById('togglePremium');
 const userKeyInput = document.getElementById('userKey');
 const changeUserKeyBtn = document.getElementById('changeUserKey');
@@ -120,8 +115,6 @@ const adminInfoDiv = document.getElementById('adminInfo');
 const pageTitleElement = document.getElementById('pageTitle');
 
 const admins = [
-  { name: 'jusinoj', message: 'Oh great, you again' },
-  { name: 'brenden', message: 'PodPopular' },
   { name: 'admin', message: 'Welcome, Admin!' }
 ];
 
