@@ -10,8 +10,14 @@ function login() {
         displayError("There is no account attached with this name, please create a login");
         return;
     }
+    const encoder = new TextEncoder();
+    const dataEncode = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataEncode);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    const hashedpassword = hashHex;
     
-    if (user.password !== password) {
+    if (user.password !== hashedpassword) {
         displayError("Incorrect Password");
         return;
     }
