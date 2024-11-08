@@ -176,8 +176,8 @@ menu_t*	currentMenu;
 void M_NewGame(int choice);
 void M_Episode(int choice);
 void M_ChooseSkill(int choice);
-void M_LoadGame(int choice);
-void M_SaveGame(int choice);
+//void M_LoadGame(int choice);
+//void M_SaveGame(int choice);
 void M_Options(int choice);
 void M_EndGame(int choice);
 void M_ReadThis(int choice);
@@ -232,8 +232,8 @@ enum
 {
     newgame = 0,
     options,
-    loadgame,
-    savegame,
+    //loadgame,
+   // savegame,
     readthis,
     quitdoom,
     main_end
@@ -243,8 +243,8 @@ menuitem_t MainMenu[]=
 {
     {1,"M_NGAME",M_NewGame,'n'},
     {1,"M_OPTION",M_Options,'o'},
-    {1,"M_LOADG",M_LoadGame,'l'},
-    {1,"M_SAVEG",M_SaveGame,'s'},
+    //{1,"M_LOADG",M_LoadGame,'l'},
+    //{1,"M_SAVEG",M_SaveGame,'s'},
     // Another hickup with Special edition.
     {1,"M_RDTHIS",M_ReadThis,'r'},
     {1,"M_QUITG",M_QuitDOOM,'q'}
@@ -475,25 +475,25 @@ menu_t  LoadDef =
 //
 // SAVE GAME MENU
 //
-menuitem_t SaveMenu[]=
-{
-    {1,"", M_SaveSelect,'1'},
-    {1,"", M_SaveSelect,'2'},
-    {1,"", M_SaveSelect,'3'},
-    {1,"", M_SaveSelect,'4'},
-    {1,"", M_SaveSelect,'5'},
-    {1,"", M_SaveSelect,'6'}
-};
+//menuitem_t SaveMenu[]=
+//{
+//    {1,"", M_SaveSelect,'1'},
+//    {1,"", M_SaveSelect,'2'},
+//    {1,"", M_SaveSelect,'3'},
+//    {1,"", M_SaveSelect,'4'},
+//    {1,"", M_SaveSelect,'5'},
+//    {1,"", M_SaveSelect,'6'}
+//};
 
-menu_t  SaveDef =
-{
-    load_end,
-    &MainDef,
-    SaveMenu,
-    M_DrawSave,
-    80,54,
-    0
-};
+//menu_t  SaveDef =
+//{
+//    load_end,
+//    &MainDef,
+//    SaveMenu,
+//    M_DrawSave,
+//    80,54,
+//    0
+//};
 
 
 //
