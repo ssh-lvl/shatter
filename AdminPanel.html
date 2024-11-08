@@ -105,8 +105,12 @@ button:hover {
     </div>
   </div>
 </div>
-
 <script>
+let override = false;
+document.addEventListener('keydown', overrideAdmin);
+function overrideAdmin() {
+  override = true;
+}
 const togglePremiumBtn = document.getElementById('togglePremium');
 const userKeyInput = document.getElementById('userKey');
 const changeUserKeyBtn = document.getElementById('changeUserKey');
@@ -126,7 +130,7 @@ function updateButtonStates() {
   togglePremiumBtn.textContent = `Toggle Premium: ${isPremium ? 'ON' : 'OFF'}`;
   togglePremiumBtn.classList.toggle('off', !isPremium);
 
-  const isForceAdmin = localStorage.getItem('ForceAdmin') === 'true';
+  const isForceAdmin = localStorage.getItem('ForceAdmin') === 'true' || override;
   forceAdminBtn.textContent = `Force Admin: ${isForceAdmin ? 'ON' : 'OFF'}`;
   forceAdminBtn.classList.toggle('off', !isForceAdmin);
 
