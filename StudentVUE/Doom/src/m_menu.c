@@ -47,7 +47,6 @@
 
 #include "m_argv.h"
 #include "m_controls.h"
-#include "p_saveg.h"
 
 #include "s_sound.h"
 
@@ -80,9 +79,6 @@ int			screenblocks = 10;
 // temp for screenblocks (0-9)
 int			screenSize;
 
-// -1 = no quicksave slot picked!
-int			quickSaveSlot;
-
  // 1 = message to be printed
 int			messageToPrint;
 // ...and here is the message string!
@@ -107,21 +103,11 @@ char gammamsg[5][26] =
     GAMMALVL4
 };
 
-// we are going to be entering a savegame string
-int			saveStringEnter;              
-int             	saveSlot;	// which slot to save in
-int			saveCharIndex;	// which char we're editing
-// old save description before edit
-char			saveOldString[SAVESTRINGSIZE];  
-
 boolean			inhelpscreens;
 boolean			menuactive;
 
 #define SKULLXOFF		-32
 #define LINEHEIGHT		16
-
-extern boolean		sendpause;
-char			savegamestrings[10][SAVESTRINGSIZE];
 
 char	endstring[160];
 
@@ -194,11 +180,6 @@ void M_StartGame(int choice);
 void M_Sound(int choice);
 
 void M_FinishReadThis(int choice);
-void M_LoadSelect(int choice);
-void M_SaveSelect(int choice);
-void M_ReadSaveStrings(void);
-void M_QuickSave(void);
-void M_QuickLoad(void);
 
 void M_DrawMainMenu(void);
 void M_DrawReadThis1(void);
@@ -207,10 +188,7 @@ void M_DrawNewGame(void);
 void M_DrawEpisode(void);
 void M_DrawOptions(void);
 void M_DrawSound(void);
-void M_DrawLoad(void);
-void M_DrawSave(void);
 
-void M_DrawSaveLoadBorder(int x,int y);
 void M_SetupNextMenu(menu_t *menudef);
 void M_DrawThermo(int x,int y,int thermWidth,int thermDot);
 void M_DrawEmptyCell(menu_t *menu,int item);
