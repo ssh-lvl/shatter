@@ -40,7 +40,6 @@
 #include "i_video.h"
 
 #include "p_setup.h"
-#include "p_saveg.h"
 #include "p_tick.h"
 
 #include "d_main.h"
@@ -87,7 +86,6 @@ void	G_DoPlayDemo (void);
 void	G_DoCompleted (void); 
 void	G_DoVictory (void); 
 void	G_DoWorldDone (void); 
-void	G_DoSaveGame (void); 
  
 // Gamestate the last time G_Ticker was called.
 
@@ -106,7 +104,6 @@ int             timelimit;
 
 boolean         paused; 
 boolean         sendpause;             	// send a pause event next tic 
-boolean         sendsave;             	// send a save event next tic 
 boolean         usergame;               // ok to save / end game 
  
 boolean         timingdemo;             // if true, exit with report on completion 
@@ -218,9 +215,6 @@ static int      joyymove;
 static int      joystrafemove;
 static boolean  joyarray[MAX_JOY_BUTTONS + 1]; 
 static boolean *joybuttons = &joyarray[1];		// allow [-1] 
- 
-static int      savegameslot; 
-static char     savedescription[32]; 
  
 #define	BODYQUESIZE	32
 
@@ -568,12 +562,6 @@ void G_BuildTiccmd (ticcmd_t* cmd, int maketic)
 	sendpause = false; 
 	cmd->buttons = BT_SPECIAL | BTS_PAUSE; 
     } 
- 
-    if (sendsave) 
-    { 
-	sendsave = false; 
-	cmd->buttons = BT_SPECIAL | BTS_SAVEGAME | (savegameslot<<BTS_SAVESHIFT); 
-    } 
 
     // low-res turning
 
@@ -662,7 +650,6 @@ void G_DoLoadLevel (void)
     memset (gamekeydown, 0, sizeof(gamekeydown));
     joyxmove = joyymove = joystrafemove = 0;
     mousex = mousey = 0;
-    sendpause = sendsave = paused = false;
     memset(mousearray, 0, sizeof(mousearray));
     memset(joyarray, 0, sizeof(joyarray));
 
@@ -876,9 +863,6 @@ void G_Ticker (void)
 	  case ga_loadgame: 
 	    G_DoLoadGame (); 
 	    break; 
-	  case ga_savegame: 
-	    G_DoSaveGame (); 
-	    break; 
 	  case ga_playdemo: 
 	    G_DoPlayDemo (); 
 	    break; 
@@ -974,18 +958,6 @@ void G_Ticker (void)
 			S_PauseSound (); 
 		    else 
 			S_ResumeSound (); 
-		    break; 
-					 
-		  case BTS_SAVEGAME:
-		    if (!savedescription[0]) 
-                    {
-                        M_StringCopy(savedescription, "NET GAME",
-                                     sizeof(savedescription));
-                    }
-
-		    savegameslot =  
-			(players[i].cmd.buttons & BTS_SAVEMASK)>>BTS_SAVESHIFT; 
-		    gameaction = ga_savegame; 
 		    break; 
 		} 
 	    } 
@@ -1535,12 +1507,6 @@ extern boolean setsizeneeded;
 void R_ExecuteSetViewSize (void);
 
 char	savename[256];
-
-void G_LoadGame (char* name) 
-{ 
-    M_StringCopy(savename, name, sizeof(savename));
-    gameaction = ga_loadgame; 
-} 
  
 #define VERSIONSIZE		16 
 
@@ -1599,15 +1565,6 @@ void G_DoLoadGame (void)
 // Called by the menu task.
 // Description is a 24 byte text string 
 //
-void
-G_SaveGame
-( int	slot,
-  char*	description )
-{
-    savegameslot = slot;
-    M_StringCopy(savedescription, description, sizeof(savedescription));
-    sendsave = true;
-}
 
 void G_DoSaveGame (void) 
 {
