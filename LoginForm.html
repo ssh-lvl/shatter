@@ -371,11 +371,11 @@
         doc.text(`${getCurrentLanguage() === 'en' ? "Last Name" :
                   getCurrentLanguage() === 'es' ? "Apellido" :
                   getCurrentLanguage() === 'ru' ? "Фамилия" :
-                  "Прізвище"}: ${data.lastName}`, 20, 80);
+                  "Прізвище"}: ${data.lastName}`, 20, 70);
         doc.text(`${getCurrentLanguage() === 'en' ? "School Email" :
                   getCurrentLanguage() === 'es' ? "Correo Escolar" :
                   getCurrentLanguage() === 'ru' ? "Школьная Почта" :
-                  "Шкільна Пошта"}: ${data.schoolEmail}`, 20, 100);
+                  "Шкільна Пошта"}: ${data.schoolEmail}`, 20, 80);
         
         doc.text(getCurrentLanguage() === 'en' ? "This information is to make sure you are a student enrolled at Clackamas Highschool." :
                  getCurrentLanguage() === 'es' ? "Esta información es para asegurarnos de que eres un estudiante matriculado en Clackamas Highschool." :
