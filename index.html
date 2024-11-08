@@ -411,6 +411,52 @@ transition: all 0.2s ease;
     transition: width 0.3s ease;
 }
   </style>
+<div class="full-page-div" id="loginDiv">
+        <div>
+            <h1>Fracture Login</h1>
+            <p>If you want a login, make a request for one <a href="LoginForm.html" style="color: lightblue;">here</a>.</p>
+        </div>
+        <br>
+        <div class="login-container">
+            <input type="text" autocomplete="off" placeholder="Username" id="username">
+            <input type="password" autocomplete="off" placeholder="Password" id="password">
+            <button id="loginButton" onclick="login()">Login</button>
+            <button id="loginButton" onclick="loginGuest()">Guest</button>
+            <p id="errorMessage" class="error-message"></p>
+        </div>
+    </div>
+<script src="LoginFile.js"></script>
+<script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const storedUsername = localStorage.getItem('loggedInUser');
+          const isPremium = localStorage.getItem('premium');
+          let profilePicturePath = localStorage.getItem('profilePicture') || 'Placeholder.png';
+
+          // Check if the profile picture path is valid
+          const img = new Image();
+          img.onload = function() {
+              document.getElementById('profilePicture').src = profilePicturePath;
+          };
+          img.onerror = function() {
+              profilePicturePath = 'UserImages/Placeholder.png';
+              document.getElementById('profilePicture').src = profilePicturePath;
+          };
+          img.src = profilePicturePath;
+
+          if (storedUsername) {
+              document.getElementById('name').textContent = storedUsername;
+
+              const premiumStatusElement = document.getElementById('premiumStatus');
+
+@@ -539,11 +527,3 @@
+};
+</script>
+<div class="container">
+  <img src="Icons/Loading.gif" alt="Profile Picture" class="profile-picture" id="profilePicture">
+  <div class="name" id="name">Name</div>
+  <div class="premium-status" id="premiumStatus"></div>
+  <button class="logout-button" onclick="logout()">Logout</button>
+</div>
   <div id="navcontainer3">
   </div>
   <div id="navcontainer2">
