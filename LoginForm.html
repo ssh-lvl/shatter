@@ -178,99 +178,119 @@
       </div>
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
 <script>
-  // Add event listeners to form inputs
-  const passwordInput = document.getElementById('password');
+  const { jsPDF } = window.jspdf;
+
+  // Section handling: Show and hide sections
   const nextButton = document.getElementById('nextButton');
-  const usernameInput = document.getElementById('username');
-  const firstNameInput = document.getElementById('firstName');
-  const lastNameInput = document.getElementById('lastName');
-  const schoolEmailInput = document.getElementById('schoolEmail');
-  const profilePicture = document.getElementById('profilePicture');
-  const schoolPhoto = document.getElementById('schoolPhoto');
+  const generateButton = document.getElementById('generateButton');
+  const section1 = document.getElementById('section1');
+  const section2 = document.getElementById('section2');
+  const passwordInput = document.getElementById('password');
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordStrength = document.getElementById('passwordStrength');
 
-  // Check password strength and enable next button
+  const profilePictureInput = document.getElementById('profilePictureInput');
+  const schoolPhotoInput = document.getElementById('schoolPhotoInput');
+
+  let profileImage = null;
+  let schoolImage = null;
+
+  // Handle Show/Hide password toggle
+  togglePassword.addEventListener('click', () => {
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      togglePassword.textContent = "Hide Password";
+    } else {
+      passwordInput.type = 'password';
+      togglePassword.textContent = "Show Password";
+    }
+  });
+
+  // Password strength check
   passwordInput.addEventListener('input', checkPasswordStrength);
-
   function checkPasswordStrength() {
     const password = passwordInput.value;
     let isStrong = false;
 
-    if (password.length >= 5) {
-      const shaObj = new jsSHA("SHA-256", "TEXT");
-      shaObj.update(password);
-      const hashedPassword = shaObj.getHash("HEX");
-
-      nextButton.disabled = false;
-
-      // Optionally, log the hashed password (for debugging purposes)
-      console.log("Hashed password:", hashedPassword);
+    if (password.length < 5) {
+      passwordStrength.textContent = "Too short: Password should be at least 5 characters long.";
+      passwordStrength.style.color = "#ff6b6b";
     } else {
-      nextButton.disabled = true;
+      passwordStrength.textContent = "Password strength: Good";
+      passwordStrength.style.color = "#48dbfb";
+      isStrong = true;
     }
+
+    generateButton.disabled = !isStrong;
   }
 
-  // Function to generate a ZIP file with the user data
-  function generateZipFile() {
-    const username = usernameInput.value;
-    const password = passwordInput.value;  // This would be the raw password before hashing
-    const firstName = firstNameInput.value;
-    const lastName = lastNameInput.value;
-    const schoolEmail = schoolEmailInput.value;
-    
-    // Hash password
+  // Switch to section2 (Password entry) when 'Next' is clicked
+  nextButton.addEventListener('click', () => {
+    section1.classList.add('hidden');
+    section2.classList.remove('hidden');
+  });
+
+  // Handle file uploads and save them locally (in base64)
+  profilePictureInput.addEventListener('change', handleImageUpload);
+  schoolPhotoInput.addEventListener('change', handleImageUpload);
+
+  function handleImageUpload(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (e.target.id === 'profilePictureInput') {
+        profileImage = reader.result; // Save the base64 string of the profile picture
+      } else if (e.target.id === 'schoolPhotoInput') {
+        schoolImage = reader.result; // Save the base64 string of the school photo
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Generate the PDF when the "Generate PDF" button is clicked
+  generateButton.addEventListener('click', () => {
+    const username = document.getElementById('username').value;
+    const password = passwordInput.value;  // Get the raw password
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const schoolEmail = document.getElementById('schoolEmail').value;
+
+    // Validate required fields
+    if (!username || !password || !firstName || !lastName || !schoolEmail) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // Hash the password using SHA-256
     const shaObj = new jsSHA("SHA-256", "TEXT");
     shaObj.update(password);
     const hashedPassword = shaObj.getHash("HEX");
 
-    // Collect image data from localStorage if images were uploaded
-    const profileImage = localStorage.getItem('profilePicture');
-    const schoolImage = localStorage.getItem('schoolPhoto');
+    // Create the PDF document
+    const doc = new jsPDF();
+    doc.text(`Username: ${username}`, 10, 10);
+    doc.text(`Full Name: ${firstName} ${lastName}`, 10, 20);
+    doc.text(`Email: ${schoolEmail}`, 10, 30);
+    doc.text(`Password (hashed): ${hashedPassword}`, 10, 40);
 
-    // Format the data as text
-    let textData = `Username: ${username}\n`;
-    textData += `Password (hashed): ${hashedPassword}\n`;
-    textData += `Full Name: ${firstName} ${lastName}\n`;
-    textData += `Email: ${schoolEmail}\n`;
-
+    // Optionally include the profile and school photos
     if (profileImage) {
-      textData += `Profile Picture: Image available (stored locally)\n`;
+      const imgDataProfile = profileImage.split(',')[1];  // Extract base64 data
+      doc.addImage('data:image/jpeg;base64,' + imgDataProfile, 'JPEG', 10, 50, 50, 50);
     }
 
     if (schoolImage) {
-      textData += `School Photo: Image available (stored locally)\n`;
+      const imgDataSchool = schoolImage.split(',')[1];  // Extract base64 data
+      doc.addImage('data:image/jpeg;base64,' + imgDataSchool, 'JPEG', 10, 110, 50, 50);
     }
 
-    // Create a ZIP archive using JSZip
-    const zip = new JSZip();
-
-    // Add the text data to the zip file
-    zip.file("account_creation.txt", textData);
-
-    // If profile image is available, add it to the zip file
-    if (profileImage) {
-      const profileImageData = profileImage.split(',')[1];  // Extract base64 data
-      zip.file("profilePicture.jpg", profileImageData, { base64: true });
-    }
-
-    // If school image is available, add it to the zip file
-    if (schoolImage) {
-      const schoolImageData = schoolImage.split(',')[1];  // Extract base64 data
-      zip.file("schoolPhoto.jpg", schoolImageData, { base64: true });
-    }
-
-    // Generate the ZIP file and trigger a download
-    zip.generateAsync({ type: "blob" }).then(function(content) {
-      saveAs(content, "account_data.zip");
-    });
-  }
-
-  // Add event listener for form submission or button click to generate zip file
-  nextButton.addEventListener('click', generateZipFile);
-
+    // Save the generated PDF
+    doc.save('account_creation_form.pdf');
+  });
 </script>
 
   </body>
