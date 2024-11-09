@@ -421,9 +421,9 @@ transition: all 0.2s ease;
         <div class="login-container">
             <input type="text" autocomplete="off" placeholder="Username" id="username">
             <input type="password" autocomplete="off" placeholder="Password" id="password">
-	    <script src="LoginFile.js"></script>
-            <button id="loginButton" onclick="login()">Login</button>
-            <button id="loginButton" onclick="loginGuest()">Guest</button>
+	    <script src="LoginFile.js">function test() {login()}</script>
+            <button id="loginButton" onclick="test()">Login</button>
+            <button id="loginButton" onclick="">Guest</button>
             <p id="errorMessage" class="error-message"></p>
         </div>
     </div>
