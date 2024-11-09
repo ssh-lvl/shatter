@@ -1,7 +1,7 @@
 const users = [
     { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jusino.png"} //Admin
 // Login function
-function login() {
+function fracturelogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const user = users.find(u => u.username === username);
