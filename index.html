@@ -412,6 +412,7 @@ transition: all 0.2s ease;
 }
   </style>
 <script src="LoginFile.js"></script>
+import {login,loginGuest} from 'LoginFile.js'
 <div class="full-page-div" id="loginDiv">
         <div>
             <h1>Fracture Login</h1>
@@ -431,7 +432,7 @@ transition: all 0.2s ease;
           const storedUsername = localStorage.getItem('loggedInUser');
           const isPremium = localStorage.getItem('premium');
           let profilePicturePath = localStorage.getItem('profilePicture') || 'Placeholder.png';
-
+      
           // Check if the profile picture path is valid
           const img = new Image();
           img.onload = function() {
@@ -442,15 +443,29 @@ transition: all 0.2s ease;
               document.getElementById('profilePicture').src = profilePicturePath;
           };
           img.src = profilePicturePath;
-
+      
           if (storedUsername) {
               document.getElementById('name').textContent = storedUsername;
-
+      
               const premiumStatusElement = document.getElementById('premiumStatus');
-
-@@ -539,11 +527,3 @@
-};
-</script>
+      
+              if (isPremium === 'true') {
+                  premiumStatusElement.textContent = 'Verified Account';
+                  premiumStatusElement.classList.add('premium');
+              } else {
+                  premiumStatusElement.textContent = 'Standard Account';
+                  premiumStatusElement.classList.add('non-premium');
+              }
+          }
+      };
+      
+      function logout() {
+          localStorage.removeItem('loggedInUser');
+          localStorage.removeItem('premium');
+          localStorage.removeItem('profilePicture');
+          location.reload();
+      }
+        </script>
 <div class="container">
   <img src="Icons/Loading.gif" alt="Profile Picture" class="profile-picture" id="profilePicture">
   <div class="name" id="name">Name</div>
