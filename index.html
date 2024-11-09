@@ -412,20 +412,6 @@ transition: all 0.2s ease;
     transition: width 0.3s ease;
 }
   </style>
-<div class="full-page-div" id="loginDiv">
-        <div>
-            <h1>Fracture Login</h1>
-            <p>If you want a login, make a request for one <a href="LoginForm.html" style="color: lightblue;">here</a>.</p>
-        </div>
-        <br>
-        <div class="login-container">
-            <input type="text" autocomplete="off" placeholder="Username" id="username">
-            <input type="password" autocomplete="off" placeholder="Password" id="password">
-            <button id="loginButton" onclick="login()">Login</button>
-            <button id="loginButton" onclick="loginGuest()">Guest</button>
-            <p id="errorMessage" class="error-message"></p>
-        </div>
-    </div>
 <script>
       document.addEventListener('DOMContentLoaded', () => {
           const storedUsername = localStorage.getItem('loggedInUser');
@@ -464,9 +450,6 @@ transition: all 0.2s ease;
           localStorage.removeItem('profilePicture');
           location.reload();
       }
-	const users = [
-    { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jusino.png"} //Admin
-// Login function
 function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -668,6 +651,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
         </script>
+<div class="full-page-div" id="loginDiv">
+        <div>
+            <h1>Fracture Login</h1>
+            <p>If you want a login, make a request for one <a href="LoginForm.html" style="color: lightblue;">here</a>.</p>
+        </div>
+        <br>
+        <div class="login-container">
+            <input type="text" autocomplete="off" placeholder="Username" id="username">
+            <input type="password" autocomplete="off" placeholder="Password" id="password">
+            <button id="loginButton" onclick="login()">Login</button>
+            <button id="loginButton" onclick="loginGuest()">Guest</button>
+            <p id="errorMessage" class="error-message"></p>
+        </div>
+    </div>
+
 <div class="container">
   <img src="Icons/Loading.gif" alt="Profile Picture" class="profile-picture" id="profilePicture">
   <div class="name" id="name">Name</div>
