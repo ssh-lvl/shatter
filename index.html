@@ -1,7 +1,6 @@
 <head>
   <script>
-	const users = [
-    { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jusino.png"} //Admin
+
   </script>
   <script src="js/chromebookcheck.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,6 +11,7 @@
   <title>Fracture</title>
   <link rel="stylesheet" href="css/login.css">
   <script src="js/achivements.js"></script>
+  <script src="LoginFile.js"></script>
   <script src="textsplash.js" onload="changeText()"></script>
   <script src="js/UpdateValues.js"></script>
   <script src="js/lastpage.js"></script>
@@ -412,6 +412,21 @@ transition: all 0.2s ease;
     transition: width 0.3s ease;
 }
   </style>
+<div class="full-page-div" id="loginDiv">
+        <div>
+            <h1>Fracture Login</h1>
+            <p>If you want a login, make a request for one <a href="LoginForm.html" style="color: lightblue;">here</a>.</p>
+        </div>
+        <br>
+        <div class="login-container">
+            <input type="text" autocomplete="off" placeholder="Username" id="username">
+            <input type="password" autocomplete="off" placeholder="Password" id="password">
+	    <script src="LoginFile.js"></script>
+            <button id="loginButton" onclick="login()">Login</button>
+            <button id="loginButton" onclick="loginGuest()">Guest</button>
+            <p id="errorMessage" class="error-message"></p>
+        </div>
+    </div>
 <script>
       document.addEventListener('DOMContentLoaded', () => {
           const storedUsername = localStorage.getItem('loggedInUser');
@@ -450,222 +465,7 @@ transition: all 0.2s ease;
           localStorage.removeItem('profilePicture');
           location.reload();
       }
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const user = users.find(u => u.username === username);
-    
-    if (!user) {
-        displayError("There is no account attached with this name, please create a login");
-        return;
-    }
-    const encoder = new TextEncoder();
-    const dataEncode = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', dataEncode);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    const hashedpassword = hashHex;
-    
-    if (user.password !== hashedpassword) {
-        displayError("Incorrect Password");
-        return;
-    }
-    
-    if (user.banned) {
-        displayError(`This account has been banned. Reason: ${user.banReason}`);
-        return;
-    }
-    
-    clearError();
-    
-    // Save user data to localStorage
-    localStorage.setItem('premium', user.premium);
-    localStorage.setItem('loggedInUser', user.username);
-    localStorage.setItem('profilePicture', user.profilePicture);
-    localStorage.setItem('userVar', JSON.stringify(user));
-    
-    setTimeout(() => {
-        window.location.reload();
-    }, 500);
-}
-// Guest login function
-function loginGuest() {
-    localStorage.setItem('premium', 'false');
-    localStorage.setItem('loggedInUser', 'Guest');
-    
-    setTimeout(() => {
-        window.location.reload();
-    }, 500);
-}
-// New logout function
-function logoutChange() {
-    localStorage.setItem('premium', 'loggedOut');
-    localStorage.setItem('loggedInUser', 'loggedOut');
-    localStorage.setItem('profilePicture', 'loggedOut');
-    localStorage.setItem('userVar', 'loggedOut');
-    localStorage.setItem('singleReload', '1');
-
-    updateUIAfterLogout();
-}
-// Function to check and handle single reload
-function checkSingleReload() {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    const singleReload = localStorage.getItem('singleReload');
-    if (singleReload === '1' && loggedInUser !== 'loggedOut') {
-        localStorage.setItem('singleReload', '0');
-        window.location.reload();
-    }
-}
-// Function to check user state
-function checkUserState() {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    const userVar = localStorage.getItem('userVar');
-    // If the user is logged out, prevent further checks and operations
-    if (!loggedInUser || !userVar || loggedInUser === 'loggedOut' || userVar === 'loggedOut') {
-        logoutChange();
-        return;
-    }
-    const storedUser = JSON.parse(userVar);
-    const currentUser = users.find(u => u.username === loggedInUser);
-    if (!currentUser) {
-        logoutChange();
-        return;
-    }
-    if (JSON.stringify(currentUser) !== JSON.stringify(storedUser)) {
-        logoutChange();
-        return;
-    }
-    // User state is valid, update UI
-    updateUIAfterLogin(currentUser.username, currentUser.premium);
-}
-// Display error message
-function displayError(message) {
-    const errorMessage = document.getElementById('errorMessage');
-    errorMessage.textContent = message;
-    errorMessage.style.display = 'block';
-}
-// Clear error message
-function clearError() {
-    const errorMessage = document.getElementById('errorMessage');
-    errorMessage.textContent = '';
-    errorMessage.style.display = 'none';
-}
-// Set up input navigation
-function setupInputNavigation() {
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const loginButton = document.getElementById('loginButton');
-    usernameInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            passwordInput.focus();
-        }
-    });
-    passwordInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            loginButton.click();
-        }
-    });
-}
-// Ban user function
-function banUser(username, reason) {
-    const user = users.find(u => u.username === username);
-    if (user) {
-        user.banned = true;
-        user.banReason = reason;
-        console.log(`User ${username} has been banned. Reason: ${reason}`);
-    } else {
-        console.log(`User ${username} not found.`);
-    }
-}
-// Update UI after login
-function updateUIAfterLogin(username, isPremium) {
-    document.getElementById('loginDiv').style.display = 'none';
-    document.querySelector('.container').style.display = 'block';
-    document.getElementById('name').textContent = username;
-    const premiumStatusElement = document.getElementById('premiumStatus');
-    if (isPremium) {
-        premiumStatusElement.textContent = 'Premium Account';
-        premiumStatusElement.classList.add('premium');
-    } else {
-        premiumStatusElement.textContent = 'Standard Account';
-        premiumStatusElement.classList.add('non-premium');
-    }
-    
-    const profilePicturePath = localStorage.getItem('profilePicture') || 'UserImages/Placeholder.png';
-    const img = new Image();
-    img.onload = function() {
-        document.getElementById('profilePicture').src = profilePicturePath;
-    };
-    img.onerror = function() {
-        document.getElementById('profilePicture').src = 'UserImages/Placeholder.png';
-    };
-    img.src = profilePicturePath;
-}
-// Update UI after logout
-function updateUIAfterLogout() {
-    document.getElementById('loginDiv').style.display = 'flex';
-    document.querySelector('.container').style.display = 'none';
-    document.getElementById('username').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('errorMessage').textContent = '';
-}
-// Show terms and conditions
-function showTermsAndConditions() {
-    const termsContainer = document.getElementById('termsContainer');
-    if (termsContainer) {
-        termsContainer.style.display = 'block';
-    }
-}
-// Hide terms and conditions
-function hideTermsAndConditions() {
-    const termsContainer = document.getElementById('termsContainer');
-    if (termsContainer) {
-        termsContainer.style.display = 'none';
-    }
-}
-// Main execution when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    setupInputNavigation();
-    checkSingleReload();
-    checkUserState();
-    const logoutButton = document.querySelector('.container button');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', logoutChange);
-    }
-    const loginButton = document.getElementById('loginButton');
-    if (loginButton) {
-        loginButton.addEventListener('click', login);
-    }
-    const termsAccepted = localStorage.getItem('termsAccepted') === 'true';
-    if (!termsAccepted) {
-        showTermsAndConditions();
-    }
-    const acceptTermsButton = document.querySelector('#termsContainer button');
-    if (acceptTermsButton) {
-        acceptTermsButton.addEventListener('click', () => {
-            localStorage.setItem('termsAccepted', 'true');
-            hideTermsAndConditions();
-        });
-    }
-});
         </script>
-<div class="full-page-div" id="loginDiv">
-        <div>
-            <h1>Fracture Login</h1>
-            <p>If you want a login, make a request for one <a href="LoginForm.html" style="color: lightblue;">here</a>.</p>
-        </div>
-        <br>
-        <div class="login-container">
-            <input type="text" autocomplete="off" placeholder="Username" id="username">
-            <input type="password" autocomplete="off" placeholder="Password" id="password">
-            <button id="loginButton" onclick="login()">Login</button>
-            <button id="loginButton" onclick="loginGuest()">Guest</button>
-            <p id="errorMessage" class="error-message"></p>
-        </div>
-    </div>
-
 <div class="container">
   <img src="Icons/Loading.gif" alt="Profile Picture" class="profile-picture" id="profilePicture">
   <div class="name" id="name">Name</div>
