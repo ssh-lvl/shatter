@@ -411,7 +411,6 @@ transition: all 0.2s ease;
     transition: width 0.3s ease;
 }
   </style>
-<script> src="LoginFile.js"</script>
 <div class="full-page-div" id="loginDiv">
         <div>
             <h1>Fracture Login</h1>
@@ -421,6 +420,7 @@ transition: all 0.2s ease;
         <div class="login-container">
             <input type="text" autocomplete="off" placeholder="Username" id="username">
             <input type="password" autocomplete="off" placeholder="Password" id="password">
+	    <script src="LoginFile.js"></script>
             <button id="loginButton" onclick="login()">Login</button>
             <button id="loginButton" onclick="loginGuest()">Guest</button>
             <p id="errorMessage" class="error-message"></p>
