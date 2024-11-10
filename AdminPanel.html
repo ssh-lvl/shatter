@@ -2,11 +2,12 @@
   <head>
     <script src="js/Lobotomy.js"></script>
     <script src="js/cloakpage.js"></script>
+    <script src="LoginFile.js"></script>
     <script src="js/chromebookcheck.js"></script>
     <script src="js/background-switcher.js"></script>
     <link rel="icon" type="image/png" href="favicon.png">
   <script src="js/AdminPanel.js"></script>
-  <title>Fracture | Admin Panel | Hello Admin</title><style>
+  <title>Fracture | Admin Panel</title><style>
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #1a1a2e;
@@ -88,16 +89,13 @@ button:hover {
 </style>
 </head><body>
 <div class="container">
-  <h1 id="pageTitle">Fracture | Admin Panel | Hello Admin</h1>
+  <h1 id="pageTitle">Fracture | Admin Panel</h1>
   <div class="admin-info" id="adminInfo">
     Welcome, Admin!
   </div>
   <div class="panel">
     <div class="controls">
       <button id="togglePremium" class="toggle-btn">Toggle Premium: OFF</button>
-      <input type="text" id="userKey" placeholder="Enter new user key">
-      <button id="changeUserKey">Change User Key</button>
-      <button id="forceAdmin">Force Admin: OFF</button>
       <button id="toggleEruda" class="toggle-btn">Toggle Eruda Console: OFF</button>
     </div>
     <div class="embed-area">
@@ -107,25 +105,14 @@ button:hover {
 </div>
 <script>
 const togglePremiumBtn = document.getElementById('togglePremium');
-const userKeyInput = document.getElementById('userKey');
-const changeUserKeyBtn = document.getElementById('changeUserKey');
-const forceAdminBtn = document.getElementById('forceAdmin');
 const toggleErudaBtn = document.getElementById('toggleEruda');
 const adminInfoDiv = document.getElementById('adminInfo');
 const pageTitleElement = document.getElementById('pageTitle');
-
-const admins = [
-  { name: 'admin', message: 'Welcome, Admin!' }
-];
 
 function updateButtonStates() {
   const isPremium = localStorage.getItem('premium') === 'true';
   togglePremiumBtn.textContent = `Toggle Premium: ${isPremium ? 'ON' : 'OFF'}`;
   togglePremiumBtn.classList.toggle('off', !isPremium);
-
-  const isForceAdmin = localStorage.getItem('ForceAdmin') === 'true' || override;
-  forceAdminBtn.textContent = `Force Admin: ${isForceAdmin ? 'ON' : 'OFF'}`;
-  forceAdminBtn.classList.toggle('off', !isForceAdmin);
 
   const isErudaActive = localStorage.getItem('ErduaConsoleActive') === 'true';
   toggleErudaBtn.textContent = `Toggle Eruda Console: ${isErudaActive ? 'ON' : 'OFF'}`;
@@ -133,11 +120,9 @@ function updateButtonStates() {
 }
 
 function updateAdminInfo() {
-  const adminName = localStorage.getItem('loggedInUser') || 'Admin';
-  const admin = admins.find(a => a.name.toLowerCase() === adminName.toLowerCase()) || admins[2];
   adminInfoDiv.textContent = admin.message;
-  document.title = `Fracture | Admin Panel | Hello ${adminName}`;
-  pageTitleElement.textContent = `Fracture | Admin Panel | Hello ${adminName}`;
+  document.title = `Fracture | Admin Panel`;
+  pageTitleElement.textContent = `Fracture | Admin Panel`;
 }
 
 togglePremiumBtn.addEventListener('click', () => {
@@ -146,23 +131,6 @@ togglePremiumBtn.addEventListener('click', () => {
   updateButtonStates();
 });
 
-changeUserKeyBtn.addEventListener('click', () => {
-  const newKey = userKeyInput.value.trim();
-  if (newKey) {
-    localStorage.setItem('loggedInUser', newKey);
-    alert(`User key changed to: ${newKey}`);
-    userKeyInput.value = '';
-    updateAdminInfo();
-  } else {
-    alert('Please enter a valid user key.');
-  }
-});
-
-forceAdminBtn.addEventListener('click', () => {
-  const currentValue = localStorage.getItem('ForceAdmin') === 'true';
-  localStorage.setItem('ForceAdmin', (!currentValue).toString());
-  updateButtonStates();
-});
 
 function loadEruda() {
   if (typeof eruda === 'undefined') {

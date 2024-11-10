@@ -11,7 +11,6 @@
   <title>Shatter</title>
   <link rel="stylesheet" href="css/login.css">
   <script src="js/achivements.js"></script>
-  <script src="LoginFile.js" defer></script>
   <script src="textsplash.js" onload="changeText()"></script>
   <script src="js/UpdateValues.js"></script>
   <script src="js/lastpage.js"></script>
@@ -414,7 +413,7 @@ transition: all 0.2s ease;
   </style>
 <div class="full-page-div" id="loginDiv">
         <div>
-            <h1>Fracture Login</h1>
+            <h1>Shatter Login</h1>
             <p>If you want a login, make a request for one <a href="LoginForm.html" style="color: lightblue;">here</a>.</p>
         </div>
         <br>
@@ -423,49 +422,10 @@ transition: all 0.2s ease;
             <input type="password" autocomplete="off" placeholder="Password" id="password">
 	
             <button id="loginButton" onclick="login()">Login</button>
-            <button id="loginButton" onclick="loginGuest()">Guest</button>
+            <!--  <button id="loginButton" onclick="loginGuest()">Guest</button>  -->
             <p id="errorMessage" class="error-message"></p>
         </div>
     </div>
-<script>
-      document.addEventListener('DOMContentLoaded', () => {
-          const storedUsername = localStorage.getItem('loggedInUser');
-          const isPremium = localStorage.getItem('premium');
-          let profilePicturePath = localStorage.getItem('profilePicture') || 'Placeholder.png';
-      
-          // Check if the profile picture path is valid
-          const img = new Image();
-          img.onload = function() {
-              document.getElementById('profilePicture').src = profilePicturePath;
-          };
-          img.onerror = function() {
-              profilePicturePath = 'UserImages/Placeholder.png';
-              document.getElementById('profilePicture').src = profilePicturePath;
-          };
-          img.src = profilePicturePath;
-      
-          if (storedUsername) {
-              document.getElementById('name').textContent = storedUsername;
-      
-              const premiumStatusElement = document.getElementById('premiumStatus');
-      
-              if (isPremium === 'true') {
-                  premiumStatusElement.textContent = 'Verified Account';
-                  premiumStatusElement.classList.add('premium');
-              } else {
-                  premiumStatusElement.textContent = 'Standard Account';
-                  premiumStatusElement.classList.add('non-premium');
-              }
-          }
-      };
-      
-      function logout() {
-          localStorage.removeItem('loggedInUser');
-          localStorage.removeItem('premium');
-          localStorage.removeItem('profilePicture');
-          location.reload();
-      }
-        </script>
 <div class="container">
   <img src="Icons/Loading.gif" alt="Profile Picture" class="profile-picture" id="profilePicture">
   <div class="name" id="name">Name</div>
@@ -928,7 +888,11 @@ if (!shouldPreventCloak()) {
               document.getElementById('name').textContent = storedUsername;
       
               const premiumStatusElement = document.getElementById('premiumStatus');
-      
+            if (isUserAdmin()) {
+                premiumStatusElement.textContent = 'Admin';
+                premiumStatusElement.classList.add('Admin');
+            }
+            else {
               if (isPremium === 'true') {
                   premiumStatusElement.textContent = 'Verified Account';
                   premiumStatusElement.classList.add('premium');
@@ -936,6 +900,7 @@ if (!shouldPreventCloak()) {
                   premiumStatusElement.textContent = 'Standard Account';
                   premiumStatusElement.classList.add('non-premium');
               }
+            }
           }
       });
       
@@ -1036,6 +1001,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Assemble UI elements
     btnGroup.appendChild(yesBtn);
+    btnGroup.appendChild(noBtn);
     notification.appendChild(text);
     notification.appendChild(btnGroup);
     
