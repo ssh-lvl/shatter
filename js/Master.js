@@ -25,11 +25,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Check if user is logged in
 document.addEventListener('DOMContentLoaded', () => {
+  if (document.title != "shatter | Login Form") {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (!loggedInUser) {
         window.location.href = '../index.html'; // Redirect to login page if not logged in
     }
-});
+}});
 
 const asciiArt1 = `
  ########******************************************* 
