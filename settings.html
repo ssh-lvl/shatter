@@ -13,241 +13,515 @@
     <title>Fracture | Settings</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
+        :root {
+            --tab-active-bg: rgba(255, 255, 255, 0.1);
+            --tab-hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--color-major);
             color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
             transition: all 0.3s ease;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+        .wrapper-menu {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
         }
 
-        h1, h2 {
-            text-align: center;
+        .NavMenu {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
-        .theme-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.theme-button {
-    flex: 1 1 calc(20% - 10px); /* 20% width minus the gap */
-    max-width: calc(20% - 10px); /* ensures no overflow due to gap */
-    box-sizing: border-box; /* include padding and border in width calculation */
-}
-
-
-        .theme-button, .action-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: var(--color-button);
-            color: var(--color-text);
-            border: none;
+        .NavMenu a {
+            text-decoration: none;
+            color: var(--text-color1);
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
             border-radius: 5px;
             transition: all 0.3s ease;
         }
 
-        .theme-button:hover, .action-button:hover {
-            background-color: var(--color-button-hover);
+        .NavMenu a:hover {
+            background-color: var(--hover-color1);
+            color: white;
         }
 
-        .custom-theme {
-            margin-top: 40px;
+        .settings-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
-        .color-inputs {
+        .settings-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .settings-header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: var(--color-text);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--color-button);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: none;
+            color: var(--color-text);
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .tab-button:hover {
+            background-color: var(--tab-hover-bg);
+        }
+
+        .tab-button.active {
+            background-color: var(--tab-active-bg);
+            border-bottom: 3px solid var(--color-button);
+        }
+
+        .tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .theme-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        .color-input {
+        .theme-button {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--color-accent);
+            color: var(--color-major);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .theme-button:hover {
+            background-color: var(--color-button-hover);
+            transform: translateY(-2px);
+        }
+
+        .background-settings {
             display: flex;
             flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .background-option {
+            background-color: var(--color-minor);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .background-option:hover {
+            transform: translateY(-2px);
+        }
+
+        .background-option h3 {
+            margin: 0 0 1rem 0;
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload label {
+            padding: 0.75rem 1rem;
+            background-color: var(--color-button-hover);
+            color: var(--color-text);
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .file-upload label:hover {
+            background-color: var(--hover-color1);
+        }
+
+        .background-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .control-button {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--color-button-hover);
+            color: var(--color-text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .control-button:hover {
+            background-color: var(--hover-color1);
+        }
+
+        .slider-container {
+            margin-top: 1rem;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--color-button-hover);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-text);
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+
+<style>
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    h1 {
+        color: var(--color-accent2);
+        margin-bottom: 20px;
+    }
+    
+    h3 {
+        color: var(--color-accent2);
+        margin: 0 0 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .settings-panel, .addon {
+        background: var(--color-major);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .setting-group, .config-group {
+        margin-bottom: 20px;
+    }
+    
+    .setting-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .input-group {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--color-text-light);
+    }
+    
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        background: var(--color-minor);
+        color: var(--color-text);
+        margin-bottom: 5px;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        outline: 2px solid var(--color-accent2);
+    }
+    
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+    
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--color-minor);
+        transition: .4s;
+        border-radius: 34px;
+    }
+    
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: var(--color-text);
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+        background-color: var(--color-accent2);
+    }
+    
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+    
+    .preview {
+        background: var(--color-minor);
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 15px;
+    }
+    
+    .preview-title {
+        color: var(--color-text-light);
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+    
+    .preview-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .button-group, .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .save-btn {
+        background: var(--color-accent2);
+        color: var(--color-background);
+    }
+    
+    .save-btn:hover {
+        background: var(--color-accent-hover);
+        transform: translateY(-2px);
+    }
+    
+    .reset-btn {
+        background: var(--color-minor);
+        color: var(--color-text);
+    }
+    
+    .reset-btn:hover {
+        background: var(--color-minor-lesser);
+        transform: translateY(-2px);
+    }
+    
+    .status-message {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 6px;
+        display: none;
+    }
+    
+    .success {
+        background: var(--color-accent2);
+        opacity: 0.3;
+        color: var(--color-text);
+    }
+    
+    .error {
+        background: var(--color-uninstall);
+        opacity: 0.3;
+        color: var(--color-text);
+    }
+    
+    .info-text {
+        color: var(--color-text-muted);
+        font-size: 0.9em;
+        margin-top: 4px;
+    }
+    
+    .checkbox-group {
+        margin-bottom: 10px;
+    }
+    
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+    }
+    
+    .cloak-settings {
+        background: var(--color-minor);
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+
+    .center-div {
+            width: 300px;
+            height: 200px;
+            background-color: var(--color-minor);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--color-accent);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .center-div p {
+            color: var(--color-text);
+            font-size: 18px;
             margin-bottom: 10px;
         }
 
-        input[type="text"], input[type="color"] {
-            margin-top: 5px;
-            padding: 5px;
-        }
-
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .background-container {
-            position: relative;
+        .progress-bar {
             width: 100%;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: background-size 0.3s, background-position 0.3s;
+            height: 20px;
+            background-color: var(--color-background);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
         }
 
-        .background-container.fit {
-            background-size: contain;
+        .progress {
+            width: 0;
+            height: 100%;
+            background-color: var(--color-accent);
+            transition: width 0.3s ease;
         }
 
-        .background-container.stretch {
-            background-size: 100% 100%;
+        .button-container {
+            display: flex;
+            gap: 10px;
         }
 
-        .background-container.tiles {
-            background-size: auto;
-            background-repeat: repeat;
+        .sync-button {
+            background-color: var(--color-button);
+            color: var(--color-text);
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
 
-        .background-container.fit-centered {
-            background-size: contain;
-            background-position: center;
+        .sync-button:hover {
+            background-color: var(--color-button-hover);
         }
-    </style>
-              <style>
-                .wrapper-menu {
-    
-    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
+
+        #fileInput {
+            display: none;
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .iframe-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    
-                .container1 {
-                    width: 100%;
-                    max-width: 1200px;
-                    padding: 2rem;
-                    
-                }
-                .Menuh1 {
-                    font-size: 3rem;
-                    font-weight: 700;
-                    color: var(--primary-color1);
-                    margin-bottom: 1rem;
-                    text-align: center;
-                }
-                .Menuh3 {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    color: var(--primary-color1);
-                    margin-bottom: 1rem;
-                    text-align: center;
-                }
-                .NavMenu {
-                  color:white;
-                    display: flex;
-                    justify-content: center;
-                    gap: 1rem;
-                    margin-bottom: 2rem;
-                    flex-wrap: wrap;
-                }
-                .NavMenu a {
-                    text-decoration: none;
-                    color: var(--text-color1);
-                    font-size: 1rem;
-                    font-weight: 500;
-                    transition: color 0.3s ease, background-color 0.3s ease;
-                    padding: 0.5rem 1rem;
-                    border-radius: 5px;
-                }
-                .NavMenu a:hover {
-                    color:white;
-                    background-color: var(--hover-color1);
-                }
-                .divider {
-                    width: 100%;
-                    height: 5px;
-                    background: linear-gradient(to right, transparent, var(--primary-color1), transparent);
-                    margin-bottom: 2rem;
-                }
-                .content {
-                    background-color: var(--color-major);
-                    padding: 2rem;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 6px rgba(138, 43, 226, 0.1);
-                }
-              </style>
-              <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    margin: 0;
-                    padding: 20px;
-                    background-color: var(--color-major);;
-                }
-                .container {
-                    max-width: 800px;
-                    margin: 0 auto;
-                    background-color: var(--color-major);;
-                    padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                }
-                h1 {
-                    color: var(--color-text);
-                }
-                .dropdown {
-                    position: relative;
-                    display: inline-block;
-                }
-                .dropbtn {
-                    background-color: var(--color-button);
-                    color: white;
-                    padding: 10px;
-                    font-size: 16px;
-                    border: none;
-                    cursor: pointer;
-                }
-                .dropdown-content {
-                    display: none;
-                    position: absolute;
-                    background-color: #f9f9f9;
-                    min-width: 160px;
-                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                    z-index: 1;
-                    padding: 12px;
-                }
-                .dropdown:hover .dropdown-content {
-                    display: block;
-                }
-                .dropdown-settings button {
-                    display: block;
-                    width: 100%;
-                    padding: 8px;
-                    text-align: left;
-                    border: none;
-                    background: none;
-                    cursor: pointer;
-                }
-                .dropdown-settings button:hover {
-                    background-color: #f1f1f1;
-                }
-                #bg-upload, #clear-bg, #apply-bg {
-                    margin-bottom: 10px;
-                }
-                .slider-container {
-                    margin-top: 10px;
-                }
-                #blur-slider {
-                    width: 100%;
-                }
-                </style>
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+    }
+    </style>
+
     <script src="js/navgen.js"></script>
 </head>
 <body>
@@ -258,9 +532,21 @@
           </div>
         </div>
 
-        <div class="container">
-            <h1>Theme Settings</h1>
-            <div class="theme-buttons">
+    <div class="wrapper-menu">
+        <nav class="NavMenu" id="main-nav"></nav>
+    </div>
+
+    <div class="settings-container">
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="themes">Themes</button>
+            <button class="tab-button" data-tab="background">Background</button>
+            <button class="tab-button" data-tab="cloak">Cloaking</button>
+            <button class="tab-button" data-tab="sync">Sync</button>
+        </div>
+
+        <div class="tab-content active" id="themes">
+            <div class="theme-grid">
                 <button class="theme-button" data-theme="light">Fracture</button>
                 <button class="theme-button" data-theme="cherry">Cherry</button>
                 <button class="theme-button" data-theme="ocean">Ocean</button>
@@ -296,27 +582,514 @@
                 <button class="theme-button" data-theme="crimson-night">Crimson Night</button>
             </div>
         </div>
-            
-        <div class="container">
-            <h1>Background Settings</h1>
-            <div class="dropdown">
-                <button class="dropbtn">Background Image</button>
-                <div class="dropdown-content">
-                    <input type="file" id="bg-upload" accept="image/*">
-                    <button id="clear-bg">Clear Background</button>
-                    <button id="apply-bg">Apply</button>
-                    <div class="dropdown-settings">
-                        <button data-bg-image="fit">Fit to Page</button>
-                        <button data-bg-image="stretch">Stretch to Fit</button>
-                        <button data-bg-image="tiles">Tiles</button>
-                        <button data-bg-image="fit-centered">Fit Centered</button>
+
+        <div class="tab-content" id="background">
+            <div class="background-settings">
+                <div class="background-option">
+                    <h3>Upload Background Image</h3>
+                    <div class="file-upload">
+                        <label for="bg-upload">
+                            Choose Image
+                            <input type="file" id="bg-upload" accept="image/*">
+                        </label>
                     </div>
+                    
+                    <div class="image-preview-container">
+                        <div class="image-preview" id="preview"></div>
+                        <div class="image-controls">
+                            <div class="image-actions">
+                                <button class="control-button" id="clear-bg">Clear Background</button>
+                            </div>
+                            <div class="toggle-container">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="antialiasing-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span>Antialiasing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="background-option">
+                    <h3>Background Style</h3>
+                    <div class="style-grid">
+                        <button class="style-button" data-bg-image="fit">Fit to Page</button>
+                        <button class="style-button" data-bg-image="stretch">Stretch to Fit</button>
+                        <button class="style-button" data-bg-image="tiles">Tiles</button>
+                        <button class="style-button" data-bg-image="fit-centered">Fit Centered</button>
+                    </div>
+                </div>
+    
+                <div class="background-option">
+                    <h3>Background Blur</h3>
                     <div class="slider-container">
-                        <label for="blur-slider">Blur: <span id="blur-value">0</span>px</label>
+                        <label for="blur-slider">Blur Amount: <span id="blur-value">0</span>px</label>
                         <input type="range" id="blur-slider" min="0" max="20" value="0">
                     </div>
                 </div>
             </div>
         </div>
-    </body>
-    </html>
+
+        <div class="tab-content" id="cloak">
+            <div class="iframe-container">
+                <iframe src="cloak.html" title="Example iframe"></iframe>
+              </div>
+        </div>
+
+        <div class="tab-content" id="sync">
+
+            <div class="center-div">
+                <p id="statusText">Sync Fracture Sites</p>
+                <div class="progress-bar">
+                    <div id="progressBar" class="progress"></div>
+                </div>
+                <p id="errorMessage" class="error-message"></p>
+            </div>
+            <div class="button-container">
+                <button class="sync-button" id="exportBtn">Export</button>
+                <button class="sync-button" id="importBtn">Import</button>
+            </div>
+            <input type="file" id="fileInput" accept=".json">
+
+        </div>
+
+
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Update blur slider value display
+        const blurSlider = document.getElementById('blur-slider');
+        const blurValue = document.getElementById('blur-value');
+        
+        blurSlider.addEventListener('input', () => {
+            blurValue.textContent = blurSlider.value;
+        });
+
+        // File upload preview
+        document.getElementById('bg-upload').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.body.style.backgroundImage = `url(${event.target.result})`;
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    </script>
+
+<script>
+    const DEFAULT_SETTINGS = {
+        enabled: false,
+        windowWidth: 1080,
+        windowHeight: 800,
+        fallbackUrl: 'https://graystudio.github.io/Fracture/index.html',
+        redirectUrl: 'https://google.com',
+        resizable: false,
+        showScrollbars: false,
+        autoRunInIframes: true
+    };
+    
+    function showStatus(message, isError = false) {
+        const statusElement = document.getElementById('statusMessage');
+        statusElement.textContent = message;
+        statusElement.className = `status-message ${isError ? 'error' : 'success'}`;
+        statusElement.style.display = 'block';
+        
+        setTimeout(() => {
+            statusElement.style.display = 'none';
+        }, 3000);
+    }
+    
+    function toggleAutoBlank() {
+        const isEnabled = document.getElementById('autoabToggle').checked;
+        localStorage.setItem('autoab', isEnabled ? 'installed' : 'uninstalled');
+        showStatus(isEnabled ? 'Auto About:Blank enabled' : 'Auto About:Blank disabled');
+    }
+    
+    function saveSettings() {
+        const settings = {
+            windowWidth: parseInt(document.getElementById('windowWidth').value) || DEFAULT_SETTINGS.windowWidth,
+            windowHeight: parseInt(document.getElementById('windowHeight').value) || DEFAULT_SETTINGS.windowHeight,
+            fallbackUrl: document.getElementById('fallbackUrl').value || DEFAULT_SETTINGS.fallbackUrl,
+            redirectUrl: document.getElementById('redirectUrl').value || DEFAULT_SETTINGS.redirectUrl,
+            resizable: document.getElementById('resizableCheck').checked,
+            showScrollbars: document.getElementById('scrollCheck').checked,
+            autoRunInIframes: document.getElementById('autoRunCheck').checked
+        };
+    
+        // Validate inputs
+        if (settings.windowWidth < 500 || settings.windowHeight < 400) {
+            showStatus('Window dimensions are too small', true);
+            return;
+        }
+    
+        try {
+            new URL(settings.fallbackUrl);
+            new URL(settings.redirectUrl);
+        } catch (e) {
+            showStatus('Invalid URL format', true);
+            return;
+        }
+    
+        // Save all settings to localStorage
+        Object.entries(settings).forEach(([key, value]) => {
+            localStorage.setItem(`autoab_${key}`, typeof value === 'boolean' ? value.toString() : value);
+        });
+    
+        showStatus('Settings saved successfully');
+    }
+    
+    function resetSettings() {
+        document.getElementById('windowWidth').value = DEFAULT_SETTINGS.windowWidth;
+        document.getElementById('windowHeight').value = DEFAULT_SETTINGS.windowHeight;
+        document.getElementById('fallbackUrl').value = DEFAULT_SETTINGS.fallbackUrl;
+        document.getElementById('redirectUrl').value = DEFAULT_SETTINGS.redirectUrl;
+        document.getElementById('resizableCheck').checked = DEFAULT_SETTINGS.resizable;
+        document.getElementById('scrollCheck').checked = DEFAULT_SETTINGS.showScrollbars;
+        document.getElementById('autoRunCheck').checked = DEFAULT_SETTINGS.autoRunInIframes;
+        
+        saveSettings();
+        showStatus('Settings reset to default');
+    }
+    
+    // Initialize settings on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const isEnabled = localStorage.getItem('autoab') === 'installed';
+        document.getElementById('autoabToggle').checked = isEnabled;
+        
+        // Load saved settings or use defaults
+        document.getElementById('windowWidth').value = localStorage.getItem('autoab_windowWidth') || DEFAULT_SETTINGS.windowWidth;
+        document.getElementById('windowHeight').value = localStorage.getItem('autoab_windowHeight') || DEFAULT_SETTINGS.windowHeight;
+        document.getElementById('fallbackUrl').value = localStorage.getItem('autoab_fallbackUrl') || DEFAULT_SETTINGS.fallbackUrl;
+        document.getElementById('redirectUrl').value = localStorage.getItem('autoab_redirectUrl') || DEFAULT_SETTINGS.redirectUrl;
+        document.getElementById('resizableCheck').checked = localStorage.getItem('autoab_resizable') === 'true' || DEFAULT_SETTINGS.resizable;
+        document.getElementById('scrollCheck').checked = localStorage.getItem('autoab_showScrollbars') === 'true' || DEFAULT_SETTINGS.showScrollbars;
+        document.getElementById('autoRunCheck').checked = localStorage.getItem('autoab_autoRunInIframes') === 'true' || DEFAULT_SETTINGS.autoRunInIframes;
+    });
+    </script>
+    
+    <script>
+    const DEFAULT_SETTINGS = {
+    favicon: 'https://www.google.com/favicon.ico',
+    tabName: 'Google'
+    };
+    
+    function showStatus(message, isError = false) {
+    const statusElement = document.getElementById('statusMessage');
+    statusElement.textContent = message;
+    statusElement.className = `status-message ${isError ? 'error' : 'success'}`;
+    statusElement.style.display = 'block';
+    
+    setTimeout(() => {
+        statusElement.style.display = 'none';
+    }, 3000);
+    }
+    
+    function updatePreview() {
+    const faviconUrl = document.getElementById('faviconInput').value || DEFAULT_SETTINGS.favicon;
+    const tabName = document.getElementById('tabNameInput').value || DEFAULT_SETTINGS.tabName;
+    
+    document.getElementById('faviconPreview').src = faviconUrl;
+    document.getElementById('tabNamePreview').textContent = tabName;
+    }
+    
+    function toggleCloaking() {
+    const isEnabled = document.getElementById('cloakToggle').checked;
+    localStorage.setItem('concloak', isEnabled ? 'installed' : 'uninstalled');
+    
+    if (isEnabled) {
+        initializeCloaking();
+        showStatus('Cloaking enabled');
+    } else {
+        // Reset to default favicon and title
+        updateFavicon(window.location.origin + '/favicon.ico');
+        updateTabName(document.documentElement.getAttribute('data-original-title') || 'Tab Cloaking Settings');
+        showStatus('Cloaking disabled');
+    }
+    }
+    
+    function saveSettings() {
+    const faviconUrl = document.getElementById('faviconInput').value || DEFAULT_SETTINGS.favicon;
+    const tabName = document.getElementById('tabNameInput').value || DEFAULT_SETTINGS.tabName;
+    
+    localStorage.setItem('faviconCloak', faviconUrl);
+    localStorage.setItem('tabNameCloak', tabName);
+    
+    if (document.getElementById('cloakToggle').checked) {
+        updateFavicon(faviconUrl);
+        updateTabName(tabName);
+    }
+    
+    showStatus('Settings saved successfully');
+    }
+    
+    function resetSettings() {
+    document.getElementById('faviconInput').value = DEFAULT_SETTINGS.favicon;
+    document.getElementById('tabNameInput').value = DEFAULT_SETTINGS.tabName;
+    
+    updatePreview();
+    saveSettings();
+    showStatus('Settings reset to default');
+    }
+    
+    // Initialize settings on page load
+    document.addEventListener('DOMContentLoaded', () => {
+    // Store original title for later
+    document.documentElement.setAttribute('data-original-title', document.title);
+    
+    // Load saved settings
+    const isCloakInstalled = localStorage.getItem('concloak') === 'installed';
+    document.getElementById('cloakToggle').checked = isCloakInstalled;
+    
+    document.getElementById('faviconInput').value = localStorage.getItem('faviconCloak') || DEFAULT_SETTINGS.favicon;
+    document.getElementById('tabNameInput').value = localStorage.getItem('tabNameCloak') || DEFAULT_SETTINGS.tabName;
+    
+    updatePreview();
+    
+    if (isCloakInstalled) {
+        initializeCloaking();
+    }
+    });
+    
+    // Add the original script functions
+    function updateFavicon(faviconUrl) {
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+    }
+    link.href = faviconUrl;
+    }
+    
+    function updateTabName(newName) {
+    document.title = newName;
+    }
+    
+    function initializeCloaking() {
+    const isCloakInstalled = localStorage.getItem('concloak') === 'installed';
+    
+    if (!isCloakInstalled) {
+        console.log('Cloaking not installed');
+        return;
+    }
+    
+    const faviconCloak = localStorage.getItem('faviconCloak');
+    const tabNameCloak = localStorage.getItem('tabNameCloak');
+    
+    if (faviconCloak) {
+        updateFavicon(faviconCloak);
+    }
+    
+    if (tabNameCloak) {
+        updateTabName(tabNameCloak);
+    }
+    }
+    </script>
+    
+    <script>
+    const defaultCloakSettings = {
+        imageSrc: "https://example.com/default-cloak.jpg",
+        faviconSrc: "https://example.com/favicon.ico",
+        pageTitle: "Google Classroom",
+        blacklist: ["studentvue", "chat"]
+    };
+    
+    function updateSwitches() {
+        document.getElementById('cloakSwitch').checked = localStorage.getItem('cloak') === 'installed';
+        document.getElementById('protectionSwitch').checked = localStorage.getItem('GGBlock') === 'installed';
+    }
+    
+    function toggleCloak() {
+        const isEnabled = document.getElementById('cloakSwitch').checked;
+        localStorage.setItem('cloak', isEnabled ? 'installed' : 'uninstalled');
+    }
+    
+    function toggleTabProtection() {
+        const isEnabled = document.getElementById('protectionSwitch').checked;
+        localStorage.setItem('GGBlock', isEnabled ? 'installed' : 'uninstalled');
+    }
+    
+    function saveCloakSettings() {
+        const settings = {
+            imageSrc: document.getElementById('cloakImageSrc').value || defaultCloakSettings.imageSrc,
+            faviconSrc: document.getElementById('cloakFaviconSrc').value || defaultCloakSettings.faviconSrc,
+            pageTitle: document.getElementById('cloakPageTitle').value || defaultCloakSettings.pageTitle,
+            blacklist: document.getElementById('cloakBlacklist').value.split(',').map(s => s.trim())
+        };
+    
+        Object.entries(settings).forEach(([key, value]) => {
+            localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+        });
+    
+        localStorage.setItem('cloak', 'installed');
+        document.getElementById('cloakSwitch').checked = true;
+        alert('Settings saved successfully!');
+    }
+    
+    function setDefaultCloakSettings() {
+        Object.entries(defaultCloakSettings).forEach(([key, value]) => {
+            localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+            const input = document.getElementById('cloak' + key.charAt(0).toUpperCase() + key.slice(1));
+            if (input) {
+                input.value = Array.isArray(value) ? value.join(', ') : value;
+            }
+        });
+        
+        localStorage.setItem('cloak', 'installed');
+        document.getElementById('cloakSwitch').checked = true;
+        alert('Default settings restored!');
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        updateSwitches();
+        
+        // Load saved settings into inputs
+        const settings = ['ImageSrc', 'FaviconSrc', 'PageTitle', 'Blacklist'];
+        settings.forEach(setting => {
+            const value = localStorage.getItem(setting.toLowerCase());
+            if (value) {
+                document.getElementById('cloak' + setting).value = 
+                    setting === 'Blacklist' ? JSON.parse(value).join(', ') : value;
+            }
+        });
+    });
+    </script>
+
+<script>
+    // Utility functions
+    const getCurrentDateTime = () => new Date().toISOString().replace(/[-:T.]/g, '').slice(0, 14);
+    
+    const updateUI = (() => {
+        const statusText = document.getElementById('statusText');
+        const progressBar = document.getElementById('progressBar');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        return {
+            status: (message, progress = null) => {
+                statusText.textContent = message;
+                if (progress !== null) {
+                    progressBar.style.width = `${progress}%`;
+                }
+            },
+            error: (message) => {
+                errorMessage.textContent = message;
+            },
+            reset: () => {
+                statusText.textContent = 'Sync Fracture Sites';
+                progressBar.style.width = '0%';
+                errorMessage.textContent = '';
+            }
+        };
+    })();
+    
+    // Chunk processing function
+    const processInChunks = async (items, processItem, updateProgress) => {
+        const chunkSize = 100;
+        const totalItems = items.length;
+    
+        for (let i = 0; i < totalItems; i += chunkSize) {
+            const chunk = items.slice(i, Math.min(i + chunkSize, totalItems));
+            await Promise.all(chunk.map(processItem));
+            updateProgress(Math.min(i + chunkSize, totalItems), totalItems);
+            // Allow UI to update and other tasks to run
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+    };
+    
+    // Export function
+    const exportLocalStorage = async () => {
+        updateUI.status('Preparing export...', 0);
+        updateUI.error('');
+    
+        try {
+            const keys = Object.keys(localStorage);
+            const totalItems = keys.length;
+            const localStorageData = {};
+    
+            await processInChunks(
+                keys,
+                async (key) => {
+                    localStorageData[key] = localStorage.getItem(key);
+                },
+                (processed, total) => {
+                    updateUI.status(`Exporting... ${processed}/${total}`, (processed / total) * 100);
+                }
+            );
+    
+            const blob = new Blob([JSON.stringify(localStorageData)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Fracture-Sync${getCurrentDateTime()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+    
+            updateUI.status('Export Complete!', 100);
+        } catch (error) {
+            console.error('Export error:', error);
+            updateUI.status('Export Failed!', 0);
+            updateUI.error(`Error: ${error.message}`);
+        }
+    
+        setTimeout(updateUI.reset, 2000);
+    };
+    
+    // Import function
+    const importLocalStorage = async (file) => {
+        updateUI.status('Preparing import...', 0);
+        updateUI.error('');
+    
+        try {
+            const text = await file.text();
+            const importedData = JSON.parse(text);
+            const keys = Object.keys(importedData);
+            const totalItems = keys.length;
+    
+            localStorage.clear();
+    
+            await processInChunks(
+                keys,
+                async (key) => {
+                    localStorage.setItem(key, importedData[key]);
+                },
+                (processed, total) => {
+                    updateUI.status(`Importing... ${processed}/${total}`, (processed / total) * 100);
+                }
+            );
+    
+            updateUI.status('Import Complete!', 100);
+            setTimeout(() => location.reload(), 1000);
+        } catch (error) {
+            console.error('Import error:', error);
+            updateUI.status('Import Failed!', 0);
+            updateUI.error(`Error: ${error.message}`);
+            setTimeout(updateUI.reset, 2000);
+        }
+    };
+    
+    // Event listeners
+    document.getElementById('exportBtn').addEventListener('click', exportLocalStorage);
+    document.getElementById('importBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            importLocalStorage(e.target.files[0]);
+        }
+    });
+        </script>
+</body>
+</html>
