@@ -1,11 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const bgUpload = document.getElementById('bg-upload');
     const clearBg = document.getElementById('clear-bg');
-    const applyBg = document.getElementById('apply-bg');
-    const settingsButtons = document.querySelectorAll('.dropdown-settings button');
+    const preview = document.getElementById('preview');
+    const styleButtons = document.querySelectorAll('.style-button');
     const blurSlider = document.getElementById('blur-slider');
     const blurValue = document.getElementById('blur-value');
+    const scaleValue = document.getElementById('scale-value');
+    const scaleType = document.getElementById('scale-type');
+    const applyScale = document.getElementById('apply-scale');
+    const antialiasingToggle = document.getElementById('antialiasing-toggle');
+    
     let savedBgSettings = {};
+    let originalImageData = null;
     
     const SETTINGS_KEY = 'bgSettings';
     let db;
@@ -70,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const backgroundContainer = (() => {
+     const backgroundContainer = (() => {
         let container = document.getElementById('background-container');
         if (!container) {
             container = document.createElement('div');
@@ -94,7 +100,36 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundSize: '',
             backgroundPosition: '',
             backgroundRepeat: '',
-            filter: ''
+            filter: '',
+            imageRendering: ''
+        });
+        preview.style.backgroundImage = '';
+        originalImageData = null;
+    }
+
+    async function scaleImage(imageData, scale, scaleType) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let newWidth, newHeight;
+                
+                if (scaleType === 'percent') {
+                    newWidth = img.width * (scale / 100);
+                    newHeight = img.height * (scale / 100);
+                } else { // pixels
+                    const ratio = scale / Math.max(img.width, img.height);
+                    newWidth = img.width * ratio;
+                    newHeight = img.height * ratio;
+                }
+                
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                resolve(canvas.toDataURL());
+            };
+            img.src = imageData;
         });
     }
 
@@ -102,6 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
         clearBackgroundStyles();
         if (settings.url) {
             backgroundContainer.style.backgroundImage = `url(${settings.url})`;
+            preview.style.backgroundImage = `url(${settings.url})`;
+            
+            // Apply background style
             switch (settings.position) {
                 case 'fit':
                     fitToPage(settings.url);
@@ -127,40 +165,41 @@ document.addEventListener('DOMContentLoaded', () => {
                         backgroundRepeat: 'no-repeat'
                     });
             }
+            
+            // Apply antialiasing
+            backgroundContainer.style.imageRendering = settings.antialiasing ? 'auto' : 'pixelated';
         }
+        
+        // Apply blur
         if (settings.blur !== undefined) {
             backgroundContainer.style.filter = `blur(${settings.blur}px)`;
             blurSlider.value = settings.blur;
             blurValue.textContent = settings.blur;
         }
+        
+        // Update style buttons
+        styleButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.bgImage === settings.position);
+        });
     }
 
-    function fitToPage(imageUrl) {
-        if (!imageUrl) return;
-        const img = new Image();
-        img.onload = () => {
-            const imgRatio = img.width / img.height;
-            const windowRatio = window.innerWidth / window.innerHeight;
-            Object.assign(backgroundContainer.style, {
-                backgroundSize: imgRatio > windowRatio ? 'auto 100%' : '100% auto',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
-            });
-        };
-        img.src = imageUrl;
-    }
-
+    // Initialize settings
     initStorage().then((storageType) => {
         console.log(`Using ${storageType} for background settings`);
         applyBackgroundSettings(savedBgSettings);
+        
+        // Set initial antialiasing state
+        antialiasingToggle.checked = savedBgSettings.antialiasing !== false;
     });
 
+    // File upload handler
     bgUpload.addEventListener('change', () => {
         const file = bgUpload.files[0];
         if (file && file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                savedBgSettings.url = e.target.result;
+                originalImageData = e.target.result;
+                savedBgSettings.url = originalImageData;
                 savedBgSettings.filePath = file.name;
                 saveSettings(savedBgSettings);
                 applyBackgroundSettings(savedBgSettings);
@@ -169,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Clear background handler
     clearBg.addEventListener('click', () => {
         clearBackgroundStyles();
         savedBgSettings = {};
@@ -177,22 +217,39 @@ document.addEventListener('DOMContentLoaded', () => {
         blurValue.textContent = '0';
     });
 
-    applyBg.addEventListener('click', () => {
-        const activeButton = document.querySelector('.dropdown-settings button.active');
-        if (activeButton) {
-            savedBgSettings.position = activeButton.dataset.bgImage || 'cover';
+    // Style buttons handler
+    styleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            styleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            savedBgSettings.position = button.dataset.bgImage;
             applyBackgroundSettings(savedBgSettings);
             saveSettings(savedBgSettings);
-        }
-    });
-
-    settingsButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            settingsButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
         });
     });
 
+    // Scale handler
+    applyScale.addEventListener('click', async () => {
+        if (originalImageData) {
+            const scale = parseInt(scaleValue.value);
+            const type = scaleType.value;
+            if (scale > 0) {
+                const scaledImage = await scaleImage(originalImageData, scale, type);
+                savedBgSettings.url = scaledImage;
+                saveSettings(savedBgSettings);
+                applyBackgroundSettings(savedBgSettings);
+            }
+        }
+    });
+
+    // Antialiasing handler
+    antialiasingToggle.addEventListener('change', () => {
+        savedBgSettings.antialiasing = antialiasingToggle.checked;
+        saveSettings(savedBgSettings);
+        applyBackgroundSettings(savedBgSettings);
+    });
+
+    // Blur handler
     blurSlider.addEventListener('input', () => {
         const blurAmount = parseInt(blurSlider.value, 10);
         if (!isNaN(blurAmount)) {
@@ -203,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Window resize handler
     window.addEventListener('resize', () => {
         if (savedBgSettings.position === 'fit' && savedBgSettings.url) {
             fitToPage(savedBgSettings.url);
