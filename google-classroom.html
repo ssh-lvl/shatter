@@ -832,7 +832,7 @@ document.addEventListener('DOMContentLoaded', function() {
     gameSquare.innerHTML = `
       <img class="game-image" src="${game.imageSrc}" alt="${game.name}" />
       <div class="game-name">${game.name}</div>
-      ${game.isPremium ? '<p class="premium-flag">Premium</p>' : ''}
+      <p class="premium-flag">Premium</p>
       <div class="star-icon">
         <img class="star-img" src="icons/star.png" alt="Star">
       </div>
@@ -879,7 +879,7 @@ document.addEventListener('DOMContentLoaded', function() {
         url: gameSquare.dataset.url,
         name: gameSquare.querySelector('.game-name').textContent,
         imageSrc: gameSquare.querySelector('.game-image').src,
-        isPremium: gameSquare.querySelector('.premium-flag') !== null
+        isPremium: '.premium-flag'
       };
 
       const starIcon = document.createElement('div');
