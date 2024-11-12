@@ -1,10 +1,3 @@
-import 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js';
-
-// Initialize Supabase client
-const supabaseUrl = 'https://fffwukshwgrcdyqmvahg.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmZnd1a3Nod2dyY2R5cW12YWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEzOTkxMjAsImV4cCI6MjA0Njk3NTEyMH0.MsMeFMkrJCeJzRFWMZXM-CZu8gwaScV7feentsgMQvI';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const users = [
     { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: false, profilePicture: "UserImages/jusino.png", Admin: false}, //Admin
     { username: "jaxonb423", password: "c909cb3d8dd2e89d552237a86cc769be5d500c64738af56cef033693d3d3877f", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jaxonb423.jpg", Admin: true} //Admin
@@ -13,14 +6,9 @@ const users = [
 async function login() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    const user = users.find(u => u.username === username);
     
-    const { data: user, error } = await supabase
-        .from('users') // Assuming your table name is 'users'
-        .select('username, password, banned, ban_reason, premium, profile_picture, admin') // Select required fields
-        .eq('username', username)
-        .single(); // Expect only one user with this username
-    
-    if (error || !user) {
+    if (!user) {
         displayError("There is no account attached with this name, please create a login");
         return;
     }
@@ -56,11 +44,10 @@ async function login() {
 // Return if the current user is an admin
 function isUserAdmin() {
     const loggedInUser = localStorage.getItem('loggedInUser');
-    const userVar = localStorage.getItem('userVar');
-    const user = JSON.parse(userVar);
+    const user = users.find(u => u.username === loggedInUser);
 
     // Check if user exists and is an admin
-    const isAdmin = user ? user.admin === true : false;
+    const isAdmin = user ? user.Admin === true : false;
     console.log("isUserAdmin?: ", isAdmin);
     return isAdmin;
 }
@@ -95,7 +82,7 @@ function checkSingleReload() {
     }
 }
 // Function to check user state
-async function checkUserState() {
+function checkUserState() {
     const loggedInUser = localStorage.getItem('loggedInUser');
     const userVar = localStorage.getItem('userVar');
     // If the user is logged out, prevent further checks and operations
@@ -104,11 +91,7 @@ async function checkUserState() {
         return;
     }
     const storedUser = JSON.parse(userVar);
-    const { data: currentUser, error } = await supabase
-        .from('users') // Assuming your users table is named 'users'
-        .select('username, premium, profile_picture, admin') // Fetch only the necessary fields
-        .eq('username', loggedInUser) // Match the logged-in username
-        .single(); // Expecting only one result
+    const currentUser = users.find(u => u.username === loggedInUser);
     if (!currentUser) {
         logoutChange();
         return;
@@ -150,9 +133,6 @@ function setupInputNavigation() {
         }
     });
 }
-
-//this function is so dumb, user is a const, users is a const, the change would be client side...
-
 // Ban user function
 function banUser(username, reason) {
     const user = users.find(u => u.username === username);
