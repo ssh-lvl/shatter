@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const bgUpload = document.getElementById('bg-upload');
     const clearBg = document.getElementById('clear-bg');
-    const preview = document.getElementById('preview');
     const styleButtons = document.querySelectorAll('.style-button');
     const blurSlider = document.getElementById('blur-slider');
     const blurValue = document.getElementById('blur-value');
@@ -103,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
             filter: '',
             imageRendering: ''
         });
-        preview.style.backgroundImage = '';
         originalImageData = null;
     }
 
@@ -137,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearBackgroundStyles();
         if (settings.url) {
             backgroundContainer.style.backgroundImage = `url(${settings.url})`;
-            preview.style.backgroundImage = `url(${settings.url})`;
             
             // Apply background style
             switch (settings.position) {

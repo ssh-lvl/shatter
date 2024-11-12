@@ -1,4 +1,4 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js';
+import 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js';
 
 // Initialize Supabase client
 const supabaseUrl = 'https://fffwukshwgrcdyqmvahg.supabase.co';
@@ -95,7 +95,7 @@ function checkSingleReload() {
     }
 }
 // Function to check user state
-function checkUserState() {
+async function checkUserState() {
     const loggedInUser = localStorage.getItem('loggedInUser');
     const userVar = localStorage.getItem('userVar');
     // If the user is logged out, prevent further checks and operations

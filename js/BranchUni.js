@@ -17,7 +17,7 @@ function getUrlLabel() {
     const currentUrl = window.location.href;
     if (currentUrl.startsWith('file:')) {
         return '(File)';
-    } else if (currentUrl.startsWith('https://gragin0.github.io/')) {
+    } else if (currentUrl.startsWith('https://ssh-lvl.github.io/')) {
         return '(Yggdrasil)';
     } else {
         return '(Branch)';
@@ -26,7 +26,7 @@ function getUrlLabel() {
 
 // Function to fetch and update the version number
 function updateVersionNumber() {
-    const url = 'https://api.github.com/repos/GrayStuido/Fracture/contents/UpdateNumber.txt';
+    const url = 'https://api.github.com/repos/ssh-lvl/shatter/contents/UpdateNumber.txt';
     
     fetch(url)
         .then(response => response.json())

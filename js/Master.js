@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function() {
         "../js/ErudaConsole.js",
         "../js/LoadingScreen.js",
         "../js/NotSlick.js",
-        "../js/DebuggerCat.js",
         "../js/theme-html.js",
         "../js/BanLogout.js"
     ];
