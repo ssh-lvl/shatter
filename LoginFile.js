@@ -1,4 +1,4 @@
-import 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js';
+import 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js';
 
 // Initialize Supabase client
 const supabaseUrl = 'https://fffwukshwgrcdyqmvahg.supabase.co';
