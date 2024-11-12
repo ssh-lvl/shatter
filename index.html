@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <head>
+  <script>
+
+  </script>
   <script src="js/chromebookcheck.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/BranchUni.js"></script>
   <script src="js/background-switcher.js"></script>
   <script src="js/theme-switcher.js"></script>
@@ -11,7 +15,7 @@
   <script src="textsplash.js" onload="changeText()"></script>
   <script src="js/UpdateValues.js"></script>
   <script src="js/lastpage.js"></script>
-  <script src="js/Master.js"></script>
+  <script src="js/MainMaster.js"></script>
   <script src="js/ErudaConsole.js"></script>
   <script src="js/Lobotomy.js"></script>
   <script src="js/BanLogout.js"></script>
@@ -863,7 +867,7 @@ if (!shouldPreventCloak()) {
         }
     </style>
 
-    <script type="module" src="LoginFile.js"></script>
+    <script src="LoginFile.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
           const storedUsername = localStorage.getItem('loggedInUser');
