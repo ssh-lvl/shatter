@@ -376,15 +376,11 @@
                   getCurrentLanguage() === 'es' ? "Correo Escolar" :
                   getCurrentLanguage() === 'ru' ? "Школьная Почта" :
                   "Шкільна Пошта"}: ${data.schoolEmail}`, 20, 80);
-        
-        doc.text(getCurrentLanguage() === 'en' ? "This information is to make sure you are a student enrolled at Clackamas Highschool." :
-                 getCurrentLanguage() === 'es' ? "Esta información es para asegurarnos de que eres un estudiante matriculado en Clackamas Highschool." :
-                 getCurrentLanguage() === 'ru' ? "Эта информация нужна, чтобы убедиться, что вы являетесь учеником, зачисленным в Clackamas Highschool." :
-                 "Ця інформація потрібна, щоб переконатися, що ви є учнем, зарахованим до Clackamas Highschool.", 20, 120);
+
         doc.text(getCurrentLanguage() === 'en' ? "This doubles as an anti-ban evasion measure." :
                  getCurrentLanguage() === 'es' ? "Esto también sirve como medida anti-evasión de prohibiciones." :
                  getCurrentLanguage() === 'ru' ? "Это также служит мерой против обхода запретов." :
-                 "Це також служить заходом проти обходу заборон.", 20, 130);
+                 "Це також служить заходом проти обходу заборон.", 20, 120);
         
         if (data.profilePicture) {
           doc.addImage(data.profilePicture, 'JPEG', 20, 150, 50, 50);
