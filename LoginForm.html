@@ -428,7 +428,7 @@
                        getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${data.firstName} ${data.lastName}.` :
                        getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${data.firstName} ${data.lastName}.` :
                        `Будь ласка, знайдіть прикріплений пакет запиту на вхід для ${data.firstName} ${data.lastName}.`;
-          const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Make sure you attach the zip file or we cannot add your account!!'),'%0A',encodeURIComponent(body)}`;
           window.location.href = mailtoLink;
           
           // Show email section
@@ -445,7 +445,7 @@
                      getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${firstName} ${lastName}.` :
                      getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${firstName} ${lastName}.` :
                      `Будь ласка, знайдіть прикріплений пакет запиту на вхід для ${firstName} ${lastName}.`;
-        const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Make sure you attach the zip file or we cannot add your account!!'),'%0A',encodeURIComponent(body)}`;
         window.open(mailtoLink, '_blank');
       }
   
