@@ -1,5 +1,5 @@
 const users = [
-    { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jusino.png", Admin: true}, //Admin
+    { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: true, profilePicture: "UserImages/The-Company-Drip.gif", Admin: true}, //Admin
     { username: "jaxonb423", password: "c909cb3d8dd2e89d552237a86cc769be5d500c64738af56cef033693d3d3877f", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jaxonb423.jpg", Admin: true} //Admin
 ]
 // Login function
