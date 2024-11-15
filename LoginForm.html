@@ -122,7 +122,6 @@
   </style>
   </head>
   <body>
-    <script>window.location.replace("Placeholder.html");</script>
     <div class="logo">
       <img src="Fracture-Minecraft_Title.png" width="500">
     </div>
@@ -142,20 +141,17 @@
             </div>
             
         <input type="text" id="username" placeholder="Username" required>
-        <input type="email" id="Email" placeholder="Email (required)" required>
+        <input type="email" id="Email" placeholder="Email" required>
         <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirm-password" placeholder="Confirm password" required>
         <div class="password-strength" id="passwordStrength"></div>
-        <button id="togglePassword" data-en="Show Password">Show Password</button>
-        <button onclick="generateLogin()">Generate Login</button>
+        <button id="togglePassword" >Show Password</button>
+        <button id="generate-Login" onclick="generateLogin()">Generate Login</button>
       </div>
       <div id="emailSection" class="hidden">
-        <p data-en="If the automatic email doesn't work, send us one with the header/title 'shatter login request' then attach the zip file" 
-           data-es="Si el correo automático no funciona, envíenos uno con el encabezado/título 'Solicitud de inicio de sesión de shatter' y adjunte el archivo zip" 
-           data-ru="Если автоматическая отправка электронной почты не работает, отправьте нам письмо с заголовком 'Запрос на вход в shatter' и прикрепите zip-файл" 
-           data-uk="Якщо автоматична електронна пошта не працює, надішліть нам лист із заголовком 'Запит на вхід до shatter' та прикріпіть zip-файл">
+        <p>
           If the automatic email doesn't work, send us one with the header/title 'shatter login request' then attach the zip file
         </p>
-        <button onclick="sendEmail()" data-en="Send Email" data-es="Enviar Correo" data-ru="Отправить Письмо" data-uk="Надіслати Лист">Send Email</button>
         <p>sshlvl.contact@gmail.com</p>
       </div>
     </div>
@@ -200,61 +196,79 @@
         "princess", "joshua", "cheese", "amanda", "summer", "love", "ashley", "6969", "nicole", "chelsea", "biteme",
         "matthew", "access", "yankees", "987654321", "dallas", "austin", "thunder", "taylor", "matrix"
       ];
-  
+      
+      const usernameInput = document.getElementById('username');
       const passwordInput = document.getElementById('password');
+      const emailInput = document.getElementById('Email');
+      const conpasswordInput = document.getElementById('confirm-password');
       const passwordStrength = document.getElementById('passwordStrength');
       const togglePassword = document.getElementById('togglePassword');
-  
+      const genbutton = document.getElementById('generate-Login');
+      emailInput.addEventListener('input', checkPasswordStrength);
+      usernameInput.addEventListener('input', checkPasswordStrength);
       passwordInput.addEventListener('input', checkPasswordStrength);
+      conpasswordInput.addEventListener('input', checkPasswordStrength);
       togglePassword.addEventListener('click', togglePasswordVisibility);
   
       function checkPasswordStrength() {
+        const email = emailInput.value;
+        const username = usernameInput.value;
         const password = passwordInput.value;
+        const conpassword = conpasswordInput.value;
         let isStrong = false;
-  
         if (password.length < 5) {
-          passwordStrength.textContent = getCurrentLanguage() === 'en' ? "Too short: Password should be at least 5 characters long." :
-                                         getCurrentLanguage() === 'es' ? "Muy corta: La contraseña debe tener al menos 5 caracteres." :
-                                         getCurrentLanguage() === 'ru' ? "Слишком короткий: Пароль должен быть не менее 5 символов." :
-                                         "Занадто короткий: Пароль повинен бути не менше 5 символів.";
+          passwordStrength.textContent = "Too short: Password should be at least 5 characters long.";
           passwordStrength.style.color = "#ff6b6b";
         } else if (commonPasswords.includes(password.toLowerCase())) {
-          passwordStrength.textContent = getCurrentLanguage() === 'en' ? "Weak: This is a common, easily guessed password." :
-                                         getCurrentLanguage() === 'es' ? "Débil: Esta es una contraseña común y fácil de adivinar." :
-                                         getCurrentLanguage() === 'ru' ? "Слабый: Это распространенный, легко угадываемый пароль." :
-                                         "Слабкий: Це поширений, легко вгадуваний пароль.";
+          passwordStrength.textContent = "Weak: This is a common, easily guessed password.";
           passwordStrength.style.color = "#ff6b6b";
         } else if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-          passwordStrength.textContent = getCurrentLanguage() === 'en' ? "Medium: Include uppercase, lowercase, and numbers." :
-                                         getCurrentLanguage() === 'es' ? "Medio: Incluya mayúsculas, minúsculas y números." :
-                                         getCurrentLanguage() === 'ru' ? "Средний: Включите прописные, строчные буквы и цифры." :
-                                         "Середній: Включіть великі, малі літери та цифри.";
+          passwordStrength.textContent = "Medium: Include uppercase, lowercase, and numbers.";
           passwordStrength.style.color = "#feca57";
         } else {
-          passwordStrength.textContent = getCurrentLanguage() === 'en' ? "Strong password!" :
-                                         getCurrentLanguage() === 'es' ? "¡Contraseña fuerte!" :
-                                         getCurrentLanguage() === 'ru' ? "Сильный пароль!" :
-                                         "Сильний пароль!";
+          passwordStrength.textContent = "All good!";
           passwordStrength.style.color = "#48dbfb";
           isStrong = true;
         }
-  
-        nextButton.disabled = !isStrong;
+        if (isStrong && password != conpassword) {
+          passwordStrength.textContent = "Passwords do not match.";
+          passwordStrength.style.color = "#ff6b6b";
+          isStrong = false;
+        }
+        if (email == '') {
+          passwordStrength.textContent = "Input your email.";
+          passwordStrength.style.color = "#ff6b6b";
+          isStrong = false;
+        }
+        else {
+          if (email.length < 5) {
+          passwordStrength.textContent = "Too short: Email should be at least 5 characters long.";
+          passwordStrength.style.color = "#ff6b6b";
+          isStrong = false;
+         }
+        }
+        if (username == '') {
+          passwordStrength.textContent = "Input your username.";
+          passwordStrength.style.color = "#ff6b6b";
+          isStrong = false;
+        }
+        else {
+        if (username.length < 3) {
+          passwordStrength.textContent = "Too short: Username should be at least 3 characters long.";
+          passwordStrength.style.color = "#ff6b6b";
+          isStrong = false;
+        }
+      }
+        genbutton.disabled = !isStrong;
       }
   
       function togglePasswordVisibility() {
         if (passwordInput.type === "password") {
           passwordInput.type = "text";
-          togglePassword.textContent = getCurrentLanguage() === 'en' ? "Hide Password" :
-                                       getCurrentLanguage() === 'es' ? "Ocultar Contraseña" :
-                                       getCurrentLanguage() === 'ru' ? "Скрыть Пароль" :
-                                       "Приховати Пароль";
+          togglePassword.textContent = "Hide Password";
         } else {
           passwordInput.type = "password";
-          togglePassword.textContent = getCurrentLanguage() === 'en' ? "Show Password" :
-                                       getCurrentLanguage() === 'es' ? "Mostrar Contraseña" :
-                                       getCurrentLanguage() === 'ru' ? "Показать Пароль" :
-                                       "Показати Пароль";
+          togglePassword.textContent = "Show Password";
         }
       }
   
@@ -264,51 +278,31 @@
         document.getElementById('emailSection').classList.add('hidden');
       }
   
-      function showSection2() {
-        document.getElementById('section1').classList.add('hidden');
-        document.getElementById('section2').classList.remove('hidden');
-        document.getElementById('emailSection').classList.add('hidden');
-      }
-  
       function generateLogin() {
         const username = document.getElementById('username').value;
         const password = passwordInput.value;
-        const firstName = document.getElementById('firstName').value;
-        const lastName = document.getElementById('lastName').value;
-        const schoolEmail = document.getElementById('schoolEmail').value;
+        const Email = document.getElementById('Email').value;
   
-        if (!username || !password || !firstName || !lastName || !schoolEmail) {
-          alert(getCurrentLanguage() === 'en' ? 'Please fill in all required fields.' :
-                getCurrentLanguage() === 'es' ? 'Por favor, complete todos los campos obligatorios.' :
-                getCurrentLanguage() === 'ru' ? 'Пожалуйста, заполните все обязательные поля.' :
-                'Будь ласка, заповніть усі обов\'язкові поля.');
+        if (!username || !password || !Email) {
+          alert('Please fill in all required fields.');
           return;
         }
   
         if (password.length < 5) {
-          alert(getCurrentLanguage() === 'en' ? 'Password must be at least 5 characters long.' :
-                getCurrentLanguage() === 'es' ? 'La contraseña debe tener al menos 5 caracteres.' :
-                getCurrentLanguage() === 'ru' ? 'Пароль должен быть не менее 5 символов.' :
-                'Пароль повинен бути не менше 5 символів.');
+          alert('Password must be at least 5 characters long.');
           return;
         }
   
         if (commonPasswords.includes(password.toLowerCase())) {
-          alert(getCurrentLanguage() === 'en' ? 'Please choose a stronger password. This one is too common and easily guessed.' :
-                getCurrentLanguage() === 'es' ? 'Por favor, elija una contraseña más fuerte. Esta es demasiado común y fácil de adivinar.' :
-                getCurrentLanguage() === 'ru' ? 'Пожалуйста, выберите более надежный пароль. Этот слишком распространен и легко угадывается.' :
-                'Будь ласка, виберіть більш надійний пароль. Цей занадто поширений і легко вгадується.');
+          alert('Please choose a stronger password. This one is too common and easily guessed.');
           return;
         }
   
         const loginData = {
           username: username,
           password: password,
-          firstName: firstName,
-          lastName: lastName,
-          schoolEmail: schoolEmail,
+          Email: Email,
           profilePicture: localStorage.getItem('profilePicture'),
-          schoolPhoto: localStorage.getItem('schoolPhoto')
         };
         generatePDFAndZip(loginData);
       }
@@ -324,55 +318,19 @@
         console.log("hashed password: ",hashedpassword);
         const doc = new jsPDF();
         doc.setFontSize(16);
-        doc.text(getCurrentLanguage() === 'en' ? "Student Login Information" :
-                 getCurrentLanguage() === 'es' ? "Información de Inicio de Sesión del Estudiante" :
-                 getCurrentLanguage() === 'ru' ? "Информация о Входе Студента" :
-                 "Інформація про Вхід Студента", 20, 20);
+        doc.text("Login Information", 20, 20);
         
         doc.setFontSize(12);
-        doc.text(`${getCurrentLanguage() === 'en' ? "Username" :
-                  getCurrentLanguage() === 'es' ? "Nombre de Usuario" :
-                  getCurrentLanguage() === 'ru' ? "Имя пользователя" :
-                  "Ім'я користувача"}: ${data.username}`, 20, 40);
-        doc.text(`${getCurrentLanguage() === 'en' ? "Password" :
-                  getCurrentLanguage() === 'es' ? "Contraseña" :
-                  getCurrentLanguage() === 'ru' ? "Пароль" :
-                  "Пароль"}: ${hashedpassword}`, 20, 50);
-        doc.text(`${getCurrentLanguage() === 'en' ? "First Name" :
-                  getCurrentLanguage() === 'es' ? "Nombre" :
-                  getCurrentLanguage() === 'ru' ? "Имя" :
-                  "Ім'я"}: ${data.firstName}`, 20, 60);
-        doc.text(`${getCurrentLanguage() === 'en' ? "Last Name" :
-                  getCurrentLanguage() === 'es' ? "Apellido" :
-                  getCurrentLanguage() === 'ru' ? "Фамилия" :
-                  "Прізвище"}: ${data.lastName}`, 20, 70);
-        doc.text(`${getCurrentLanguage() === 'en' ? "School Email" :
-                  getCurrentLanguage() === 'es' ? "Correo Escolar" :
-                  getCurrentLanguage() === 'ru' ? "Школьная Почта" :
-                  "Шкільна Пошта"}: ${data.schoolEmail}`, 20, 80);
-
-        doc.text(getCurrentLanguage() === 'en' ? "This doubles as an anti-ban evasion measure." :
-                 getCurrentLanguage() === 'es' ? "Esto también sirve como medida anti-evasión de prohibiciones." :
-                 getCurrentLanguage() === 'ru' ? "Это также служит мерой против обхода запретов." :
-                 "Це також служить заходом проти обходу заборон.", 20, 120);
+        doc.text(`"Username": ${data.username}`, 20, 40);
+        doc.text(`"Password": ${hashedpassword}`, 20, 50);
+        doc.text(`" Email": ${data.Email}`, 20, 60);
         
         if (data.profilePicture) {
           doc.addImage(data.profilePicture, 'JPEG', 20, 150, 50, 50);
-          doc.text(getCurrentLanguage() === 'en' ? "Profile Picture" :
-                   getCurrentLanguage() === 'es' ? "Foto de Perfil" :
-                   getCurrentLanguage() === 'ru' ? "Фото Профиля" :
-                   "Фото Профілю", 20, 210);
+          doc.text("Profile Picture", 20, 210);
         }
         
-        if (data.schoolPhoto) {
-          doc.addImage(data.schoolPhoto, 'JPEG', 100, 150, 50, 50);
-          doc.text(getCurrentLanguage() === 'en' ? "School Photo" :
-                   getCurrentLanguage() === 'es' ? "Foto Escolar" :
-                   getCurrentLanguage() === 'ru' ? "Школьное Фото" :
-                   "Шкільне Фото", 100, 210);
-        }
-        
-        const pdfName = `${data.lastName}_${data.firstName}_Login_Info.pdf`;
+        const pdfName = `${data.username}_Login_Info.pdf`;
         const pdfBlob = doc.output('blob');
   
         const zip = new JSZip();
@@ -383,26 +341,16 @@
           zip.file("profile_picture.jpg", profilePicBlob);
         }
   
-        if (data.schoolPhoto) {
-          const schoolPhotoBlob = await fetch(data.schoolPhoto).then(r => r.blob());
-          zip.file("school_photo.jpg", schoolPhotoBlob);
-        }
-  
         zip.generateAsync({type:"blob"}).then(function(content) {
-          const zipFileName = `${data.lastName}_${data.firstName}_Login_Package.zip`;
+          const zipFileName = `${data.username}_Login_Package.zip`;
           saveAs(content, zipFileName);
           
           // Open email client
           const subject = "shatter login request";
-          const body = getCurrentLanguage() === 'en' ? `Please find attached the login request package for ${data.firstName} ${data.lastName}.` :
-                       getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${data.firstName} ${data.lastName}.` :
-                       getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${data.firstName} ${data.lastName}.` :
-                       `Будь ласка, знайдіть прикріплений пакет запиту на вхід для ${data.firstName} ${data.lastName}.`;
+          const body = `Please find attached the login request package for ${data.username}.`;
           const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Make sure you attach the zip file or we cannot add your account!!'),'%0A',encodeURIComponent(body)}`;
           window.location.href = mailtoLink;
           
-          // Show email section
-          document.getElementById('section2').classList.add('hidden');
           document.getElementById('emailSection').classList.remove('hidden');
         });
       }
@@ -411,17 +359,14 @@
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const subject = "shatter login request";
-        const body = getCurrentLanguage() === 'en' ? `Please find attached the login request package for ${firstName} ${lastName}.` :
-                     getCurrentLanguage() === 'es' ? `Adjunto encontrará el paquete de solicitud de inicio de sesión para ${firstName} ${lastName}.` :
-                     getCurrentLanguage() === 'ru' ? `Пожалуйста, найдите прикрепленный пакет запроса на вход для ${firstName} ${lastName}.` :
-                     `Будь ласка, знайдіть прикріплений пакет запиту на вхід для ${firstName} ${lastName}.`;
+        const body = `Please find attached the login request package for ${username}.`;
         const mailtoLink = `mailto:sshlvl.contact@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Make sure you attach the zip file or we cannot add your account!!'),'%0A',encodeURIComponent(body)}`;
         window.open(mailtoLink, '_blank');
       }
   
       // Load saved data from localStorage
       window.addEventListener('load', () => {
-        const savedFields = ['username', 'password', 'firstName', 'lastName', 'schoolEmail'];
+        const savedFields = ['username', 'password', 'Email'];
         savedFields.forEach(field => {
           const value = localStorage.getItem(field);
           if (value) document.getElementById(field).value = value;
@@ -430,11 +375,6 @@
         const profilePicture = localStorage.getItem('profilePicture');
         if (profilePicture) {
           document.getElementById('profilePicture').innerHTML = `<img src="${profilePicture}" alt="Profile picture">`;
-        }
-  
-        const schoolPhoto = localStorage.getItem('schoolPhoto');
-        if (schoolPhoto) {
-          document.getElementById('schoolPhoto').innerHTML = `<img src="${schoolPhoto}" alt="School photo">`;
         }
   
         checkPasswordStrength();
@@ -448,7 +388,7 @@
       });
   
       function getCurrentLanguage() {
-        return localStorage.getItem('language') || 'en';
+        return 'en';
       }
   
       function changeLanguage(lang) {
