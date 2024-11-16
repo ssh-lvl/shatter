@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruffle Flash Player Example</title>
+    <script src="./js/ruffle/ruffle.js"></script>
+</head>
+<body>
+    <h1>Ruffle Flash Player Example</h1>
+    
+    <!-- Embed Flash content -->
+    <div id="flash-content">
+        <object data="./StudentVUE/flash/(Copy) papaspizzeria_v2.swf" type="application/x-shockwave-flash" width="800" height="600">
+            <param name="movie" value="./StudentVUE/flash/(Copy) papaspizzeria_v2.swf">
+            <p>Flash content could not be loaded.</p>
+        </object>
+    </div>
+
+    <script>
+        // Initialize Ruffle on the <div> containing Flash content
+        const ruffle = RufflePlayer.new();
+        ruffle.loadDocument(document.getElementById("flash-content"));
+    </script>
+</body>
+</html>
