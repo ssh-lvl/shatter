@@ -151,49 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       border-color: var(--color-third-bg);
       background-color: var(--color-third-bg);
     }
-    
-    .year-selector {
-      margin-bottom: 10px;
-    }
-    
-    .year-selector button {
-      background-color: var(--color-minor);
-      color: var(--color-text);
-      border: 2px solid var(--color-accent);
-      padding: 5px 10px;
-      margin-right: 5px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    
-    .year-selector button.active {
-      background-color: var(--color-accent);
-    }
-    
-    .global-year-selector {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--color-minor);
-      padding: 7px;
-      border-radius: 8px;
-      z-index: 90;
-    }
-    
-    .global-year-selector button {
-      background-color: var(--color-minor);
-      color: var(--color-text);
-      border: 2px solid var(--color-accent);
-      padding: 5px 10px;
-      margin: 0 5px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    
-    .global-year-selector button.active {
-      background-color: var(--color-accent);
-    }
 
     .MatrixBackground {
 z-index: -1;
@@ -264,12 +221,6 @@ background-color: black;
     <nav class="NavMenu" id="main-nav"></nav>
     <div class="divider"></div>
 </div>
-  <div class="global-year-selector">
-    <button onclick="changeAllYears('Freshman')" class="active">Freshman</button>
-    <button onclick="changeAllYears('Sophomore')">Sophomore</button>
-    <button onclick="changeAllYears('Junior')">Junior</button>
-    <button onclick="changeAllYears('Senior')">Senior</button>
-  </div>
   
   <div class="leaderboards-container">
     <div class="leaderboard" id="tetris-leaderboard">
