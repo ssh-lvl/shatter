@@ -9,7 +9,7 @@ const leaderboardsData = {
       
     ],
     slope: [
-      
+      { name: 'ssh-lvl', score: 78 }
     ],
     kitchengun: [
       
@@ -21,7 +21,7 @@ const leaderboardsData = {
       
     ],
     connect3: [
-      
+      { name: 'ssh-lvl', score: 193600 }
     ]
 
 };
