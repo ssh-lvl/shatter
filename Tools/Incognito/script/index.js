@@ -120,7 +120,7 @@ document.querySelector('#access-form').addEventListener('submit', event => {
     
     const frame = document.querySelector('.access-frame');
 
-    frame.src = '/load.html#' + btoa(event.target[0].value);
+    frame.src = 'https://ssh-lvl.github.io/shatter/Tools/Incognito/load.html#' + btoa(event.target[0].value);
     frame.style.display = 'block';
 
     document.querySelector('.access-panel').style.removeProperty('display');
