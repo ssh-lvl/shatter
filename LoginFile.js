@@ -1,8 +1,8 @@
-
+let users
 
 // Login function
 async function login() {
-    let users = fetchData('users');
+    users = await fetchData('users');
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const user = users.find(u => u.username === username);
