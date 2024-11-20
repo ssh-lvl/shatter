@@ -1,4 +1,4 @@
-let users
+let users = []
 
 // Login function
 async function login() {
