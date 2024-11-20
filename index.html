@@ -38,6 +38,7 @@
 <link rel="manifest" href="manifest.json">
 <script src="js/UpdateValues.js"></script>
   <script>
+	  window.location.replace("./Placeholder.html")
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('pwabuilder-sw.js')
         .then((registration) => {
