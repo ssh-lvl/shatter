@@ -1,5 +1,3 @@
-import { fetchData } from './js/ext-db.js';
-
 let users = fetchData('users');
 
 // Login function
