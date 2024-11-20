@@ -1,9 +1,7 @@
-const users = [
-    { username: "ssh-lvl", password: "7ac1d30246b50aca1eb26f4095e77186cca72a86ee6c9f3e8e4f3fdbb20666aa", banned: false, banReason: "", premium: true, profilePicture: "UserImages/The-Company-Drip.gif", Admin: true}, //Admin
-    { username: "jaxonb423", password: "c909cb3d8dd2e89d552237a86cc769be5d500c64738af56cef033693d3d3877f", banned: false, banReason: "", premium: true, profilePicture: "UserImages/jaxonb423.jpg", Admin: true}, //Admin
-    { username: "silver", password: "9ca598b4d4428f01d8ba7767eb1d62d400fb5921b8b25e1939d705b7c2f88e7a", banned: false, banReason: "", premium: true, profilePicture: "UserImages/silver.png"}, //User
-    { username: "taylor69.2", password: "f545d7db6ef84e7c51420e23c460b3a965f2ef5acbf304d5bf1803a7d0644ed8", banned: false, banReason: "", premium: true, profilePicture: "UserImages/taylor692.png"} //User
-]
+import { fetchData } from './js/ext-db.js';
+
+let users = fetchData('users');
+
 // Login function
 async function login() {
     const username = document.getElementById('username').value;
