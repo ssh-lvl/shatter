@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (document.title == "Shatter") {
     setupInputNavigation();
-    checkSingleReload();
+    //checkSingleReload();
     checkUserState();
     const logoutButton = document.querySelector('.container button');
     if (logoutButton) {
