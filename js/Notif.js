@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const FNotificationId = 'newnwn'; // Change this for each new notification
-  const FNotificationImportance = 3; // Change this to set importance level (1, 2, or 3)
+  const FNotificationId = 'provtext'; // Change this for each new notification
+  const FNotificationImportance = 2; // Change this to set importance level (1, 2, or 3)
 
   const FNotificationStyles = `
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
@@ -201,13 +201,13 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.innerHTML = `
       <div class="FNotification-modal-content">
 
-<a>Sign Up for the new fratchat, sorry yall!</a>
+<a>Please excuse login issues</a>
 
 <br>
       <br>
-<a> DONT SEND ME EMAILS ABOUT THIS YOU ARE GOING TO GET ME IN MASSIVE TROUBLE</a><br>
-<a> MAKE YOUR OWN FRACTURE BRANCH AND USE IT FOR YOUR SELF </a><br>
-<a> replace the <name>.html in the url bar with tutorial.html </a><br>
+<a>These are known and due to our new login service provider. we are</a><br>
+<a>sorry for this inconvenience and will fix them as soon as possible.</a><br>
+<a>Unfortunately profile pictures will not work..</a><br>
         <button class="FNotification-close-btn" onclick="FNotificationClose()">Close Notification</button>
       </div>
     `;
