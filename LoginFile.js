@@ -44,7 +44,7 @@ async function login() {
     // Save user data to localStorage
     localStorage.setItem('premium', true);
     localStorage.setItem('loggedInUser', user.username);
-    localStorage.setItem('profilePicture', user.profilePicturePath);
+    localStorage.setItem('profilePicture', user.profilePicture);
     localStorage.setItem('userVar', JSON.stringify(user));
     updateUIAfterLogin(user.username,user.premium)
     //setTimeout(() => {
