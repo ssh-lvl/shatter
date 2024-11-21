@@ -890,17 +890,14 @@ if (!shouldPreventCloak()) {
               document.getElementById('name').textContent = storedUsername;
       
               const premiumStatusElement = document.getElementById('premiumStatus');
-            if (isUserAdmin()) {
+            if (isUserAdmin() == true) {
                 premiumStatusElement.textContent = 'Admin';
                 premiumStatusElement.classList.add('Admin');
             }
             else {
-              if (isPremium === 'true') {
-                  premiumStatusElement.textContent = 'Verified Account';
+              if (isPremium == true) {
+                  premiumStatusElement.textContent = 'Shatter Account';
                   premiumStatusElement.classList.add('premium');
-              } else {
-                  premiumStatusElement.textContent = 'Standard Account';
-                  premiumStatusElement.classList.add('non-premium');
               }
             }
           }
