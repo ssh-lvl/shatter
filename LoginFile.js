@@ -135,16 +135,13 @@ function updateUIAfterLogin(username, isPremium) {
     document.querySelector('.container').style.display = 'block';
     document.getElementById('name').textContent = username;
     const premiumStatusElement = document.getElementById('premiumStatus');
-    if (isUserAdmin()) {
-        premiumStatusElement.textContent = 'Admin';
-        premiumStatusElement.classList.add('premium');
-    }
-    else {
     if (isPremium) {
         premiumStatusElement.textContent = 'Shatter Account';
-        premiumStatusElement.classList.add('premium');
       }
+    if (isUserAdmin()) {
+        premiumStatusElement.textContent = 'Admin';
     }
+    premiumStatusElement.classList.add('premium');
     
     const profilePicturePath = localStorage.getItem('profilePicture');
     const img = new Image();
