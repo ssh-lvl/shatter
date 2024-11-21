@@ -161,6 +161,9 @@ function updateUIAfterLogout() {
     document.getElementById('loginDiv').style.display = 'flex';
     document.querySelector('.container').style.display = 'none';
     document.getElementById('username').value = '';
+    const premStat = document.getElementById('premiumStatus');
+    premStat.textContent = '';
+    premStat.classList.remove('premium);
     document.getElementById('password').value = '';
     document.getElementById('errorMessage').textContent = '';
 }
