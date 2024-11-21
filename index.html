@@ -4,6 +4,7 @@
 
   </script>
   <script src="js/chromebookcheck.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/BranchUni.js"></script>
   <script src="js/background-switcher.js"></script>
   <script src="js/theme-switcher.js"></script>
@@ -11,9 +12,10 @@
   <title>Shatter</title>
   <link rel="stylesheet" href="css/login.css">
   <script src="js/achivements.js"></script>
+  <script src="textsplash.js" onload="changeText()"></script>
   <script src="js/UpdateValues.js"></script>
   <script src="js/lastpage.js"></script>
-  <script src="js/Master.js"></script>
+  <script src="js/MainMaster.js"></script>
   <script src="js/ErudaConsole.js"></script>
   <script src="js/Lobotomy.js"></script>
   <script src="js/BanLogout.js"></script>
@@ -430,8 +432,7 @@ transition: all 0.2s ease;
   <img src="Icons/Loading.gif" alt="Profile Picture" class="profile-picture" id="profilePicture">
   <div class="name" id="name">Name</div>
   <div class="premium-status" id="premiumStatus"></div>
-  <script src="loginFile.js">
-  <button class="logout-button" onclick="logoutchange()">Logout</button>
+  <button class="logout-button" onclick="logout()">Logout</button>
 </div>
   <div id="navcontainer3">
   </div>
@@ -895,12 +896,22 @@ if (!shouldPreventCloak()) {
             }
             else {
               if (isPremium === 'true') {
-                  premiumStatusElement.textContent = 'Shatter Account';
+                  premiumStatusElement.textContent = 'Verified Account';
                   premiumStatusElement.classList.add('premium');
+              } else {
+                  premiumStatusElement.textContent = 'Standard Account';
+                  premiumStatusElement.classList.add('non-premium');
               }
             }
           }
       });
+      
+      function logout() {
+          localStorage.removeItem('loggedInUser');
+          localStorage.removeItem('premium');
+          localStorage.removeItem('profilePicture');
+          //location.reload();
+      }
           </script>
 
 <div id="termsContainer" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background-color: #2b2b2b; border: 1px solid #ffffff; width: 80%; max-width: 800px; height: 80%; max-height: 600px; overflow-y: auto; text-align: justify; z-index: 9999; box-sizing: border-box;">
