@@ -898,6 +898,7 @@ if (!shouldPreventCloak()) {
               if (isPremium == true) {
                   premiumStatusElement.textContent = 'Shatter Account';
                   premiumStatusElement.classList.add('premium');
+		  throw new Error(String("user not admin! ", isUserAdmin(), ' ', storedUsername))
               }
             }
           }
