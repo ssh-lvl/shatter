@@ -136,12 +136,12 @@ function updateUIAfterLogin(username, isPremium) {
     document.getElementById('name').textContent = username;
     const premiumStatusElement = document.getElementById('premiumStatus');
     if (isPremium) {
-        premiumStatusElement.textContent = 'Shatter Account';
-      }
-    if (isUserAdmin()) {
-        premiumStatusElement.textContent = 'Admin';
+        premiumStatusElement.textContent = 'Premium Account';
+        premiumStatusElement.classList.add('premium');
+    } else {
+        premiumStatusElement.textContent = 'Standard Account';
+        premiumStatusElement.classList.add('non-premium');
     }
-    premiumStatusElement.classList.add('premium');
     
     const profilePicturePath = localStorage.getItem('profilePicture');
     const img = new Image();
@@ -158,9 +158,6 @@ function updateUIAfterLogout() {
     document.getElementById('loginDiv').style.display = 'flex';
     document.querySelector('.container').style.display = 'none';
     document.getElementById('username').value = '';
-    const premStat = document.getElementById('premiumStatus');
-    premStat.textContent = '';
-    premStat.classList.remove('premium);
     document.getElementById('password').value = '';
     document.getElementById('errorMessage').textContent = '';
 }
