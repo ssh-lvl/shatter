@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const FNotificationId = 'provtext'; // Change this for each new notification
-  const FNotificationImportance = 2; // Change this to set importance level (1, 2, or 3)
+  const FNotificationId = 'deathtxt'; // Change this for each new notification
+  const FNotificationImportance = 3; // Change this to set importance level (1, 2, or 3)
 
   const FNotificationStyles = `
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
@@ -201,13 +201,13 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.innerHTML = `
       <div class="FNotification-modal-content">
 
-<a>Please excuse login issues</a>
+<a>There are bugs and we know it!</a>
 
 <br>
       <br>
-<a>These are known and due to our new login service provider. we are</a><br>
-<a>sorry for this inconvenience and will fix them as soon as possible.</a><br>
-<a>Unfortunately profile pictures will not work..</a><br>
+<a>We are currently ignoring bugs and issues as we migrate to a </a><br>
+<a>completely fresh and new github repo. Please wait while our</a><br>
+<a>only developer works on it. Thank you for your patience.</a><br>
         <button class="FNotification-close-btn" onclick="FNotificationClose()">Close Notification</button>
       </div>
     `;
