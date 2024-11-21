@@ -1,13 +1,25 @@
 let users
 
+function getUser() {
+    let usernameInput
+    if (document.getElementById('username') != null) {
+    usernameInput = document.getElementById('username').value; // Access the input's value
+    }
+    else {
+    usernameInput = localStorage.getItem('loggedInUser')
+    }
+    return users.find(obj => obj.username === usernameInput) || ''; // Match username
+}
+
 // Login function
 async function login() {
-    users = await fetchData('users');
-    const username = document.getElementById('username').value;
+    if (users == null) {
+        users = await fetchData('users');
+    }
     const password = document.getElementById('password').value;
-    const user = users.find(u => u.username === username);
+    const user = getUser();
     
-    if (!user) {
+    if (user === '') {
         displayError("There is no account attached with this name, please create a login");
         return;
     }
@@ -28,22 +40,21 @@ async function login() {
     }
     
     clearError();
-    
+     
     // Save user data to localStorage
-    localStorage.setItem('premium', user.premium);
+    localStorage.setItem('premium', true);
     localStorage.setItem('loggedInUser', user.username);
-    localStorage.setItem('profilePicture', user.profilePicture);
+    localStorage.setItem('profilePicture', user.profilePicturePath);
     localStorage.setItem('userVar', JSON.stringify(user));
-    
-    setTimeout(() => {
-        window.location.reload();
-    }, 500);
+    updateUIAfterLogin(user.username,user.premium)
+    //setTimeout(() => {
+    //    window.location.reload();
+    //}, 500);
 }
 
 // Return if the current user is an admin
 function isUserAdmin() {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    const user = users.find(u => u.username === loggedInUser);
+    const user = getUser();
 
     // Check if user exists and is an admin
     const isAdmin = user ? user.Admin === true : false;
@@ -51,16 +62,6 @@ function isUserAdmin() {
     return isAdmin;
 }
 
-
-// Guest login function
-function loginGuest() {
-    localStorage.setItem('premium', 'false');
-    localStorage.setItem('loggedInUser', 'Guest');
-    
-    setTimeout(() => {
-        window.location.reload();
-    }, 500);
-}
 // New logout function
 function logoutChange() {
     localStorage.setItem('premium', 'loggedOut');
@@ -90,8 +91,8 @@ function checkUserState() {
         return;
     }
     const storedUser = JSON.parse(userVar);
-    const currentUser = users.find(u => u.username === loggedInUser);
-    if (!currentUser) {
+    const currentUser = getUser();
+    if (currentUser === '') {
         logoutChange();
         return;
     }
@@ -132,17 +133,7 @@ function setupInputNavigation() {
         }
     });
 }
-// Ban user function
-function banUser(username, reason) {
-    const user = users.find(u => u.username === username);
-    if (user) {
-        user.banned = true;
-        user.banReason = reason;
-        console.log(`User ${username} has been banned. Reason: ${reason}`);
-    } else {
-        console.log(`User ${username} not found.`);
-    }
-}
+
 // Update UI after login
 function updateUIAfterLogin(username, isPremium) {
     document.getElementById('loginDiv').style.display = 'none';
@@ -157,13 +148,13 @@ function updateUIAfterLogin(username, isPremium) {
         premiumStatusElement.classList.add('non-premium');
     }
     
-    const profilePicturePath = localStorage.getItem('profilePicture') || 'UserImages/Placeholder.png';
+    const profilePicturePath = localStorage.getItem('profilePicture');
     const img = new Image();
     img.onload = function() {
         document.getElementById('profilePicture').src = profilePicturePath;
     };
     img.onerror = function() {
-        document.getElementById('profilePicture').src = 'UserImages/Placeholder.png';
+        document.getElementById('profilePicture').src = '';
     };
     img.src = profilePicturePath;
 }
@@ -190,7 +181,10 @@ function hideTermsAndConditions() {
     }
 }
 // Main execution when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    if (users == null) {
+        users = await fetchData('users');
+    }
     if (document.title == "Shatter") {
     setupInputNavigation();
     checkSingleReload();
@@ -198,10 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.querySelector('.container button');
     if (logoutButton) {
         logoutButton.addEventListener('click', logoutChange);
-    }
-    const loginButton = document.getElementById('loginButton');
-    if (loginButton) {
-        loginButton.addEventListener('click', login);
     }
     const termsAccepted = localStorage.getItem('termsAccepted') === 'true';
     if (!termsAccepted) {

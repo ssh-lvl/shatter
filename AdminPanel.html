@@ -105,15 +105,11 @@ button:hover {
   </div>
 </div>
 <script>
-const togglePremiumBtn = document.getElementById('togglePremium');
 const toggleErudaBtn = document.getElementById('toggleEruda');
 const adminInfoDiv = document.getElementById('adminInfo');
 const pageTitleElement = document.getElementById('pageTitle');
 
 function updateButtonStates() {
-  const isPremium = localStorage.getItem('premium') === 'true';
-  togglePremiumBtn.textContent = `Toggle Premium: ${isPremium ? 'ON' : 'OFF'}`;
-  togglePremiumBtn.classList.toggle('off', !isPremium);
 
   const isErudaActive = localStorage.getItem('ErduaConsoleActive') === 'true';
   toggleErudaBtn.textContent = `Toggle Eruda Console: ${isErudaActive ? 'ON' : 'OFF'}`;
@@ -121,16 +117,10 @@ function updateButtonStates() {
 }
 
 function updateAdminInfo() {
-  adminInfoDiv.textContent = admin.message;
+  adminInfoDiv.textContent = "hello admin!";
   document.title = `Fracture | Admin Panel`;
   pageTitleElement.textContent = `Fracture | Admin Panel`;
 }
-
-togglePremiumBtn.addEventListener('click', () => {
-  const currentValue = localStorage.getItem('premium') === 'true';
-  localStorage.setItem('premium', (!currentValue).toString());
-  updateButtonStates();
-});
 
 
 function loadEruda() {
