@@ -86,16 +86,11 @@ function checkUserState() {
     const loggedInUser = localStorage.getItem('loggedInUser');
     const userVar = localStorage.getItem('userVar');
     // If the user is logged out, prevent further checks and operations
-    if (!loggedInUser || !userVar || loggedInUser === 'loggedOut' || userVar === 'loggedOut') {
-        logoutChange();
+    if (loggedInUser === 'loggedOut' || userVar === 'loggedOut') {
         return;
     }
     const storedUser = JSON.parse(userVar);
     const currentUser = getUser();
-    if (currentUser === '') {
-        logoutChange();
-        return;
-    }
     if (JSON.stringify(currentUser) !== JSON.stringify(storedUser)) {
         logoutChange();
         return;
