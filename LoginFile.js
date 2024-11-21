@@ -19,7 +19,7 @@ async function login() {
     const password = document.getElementById('password').value;
     const user = getUser();
     
-    if (user === '') {
+    if (user == '' || user.enabled == false) {
         displayError("There is no account attached with this name, please create a login");
         return;
     }
