@@ -1,0 +1,12 @@
+{
+  "name": "rabbit-hole",
+  "version": "1.0.0",
+  "main": "electron-main.js",
+  "author": "",
+  "license": "ISC",
+  "description": "Enter the Rabbit Hole",
+  "dependencies": {
+    "discord-rpc": "^4.0.1",
+    "steamworks.js": "^0.3.1"
+  }
+}
