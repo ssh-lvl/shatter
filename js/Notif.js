@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  const FNotificationId = 'deathtxt'; // Change this for each new notification
+  const FNotificationId = 'gonetxt'; // Change this for each new notification
   const FNotificationImportance = 3; // Change this to set importance level (1, 2, or 3)
 
   const FNotificationStyles = `
@@ -201,13 +201,13 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.innerHTML = `
       <div class="FNotification-modal-content">
 
-<a>There are bugs and we know it!</a>
+<a>End of support notice!</a>
 
 <br>
       <br>
-<a>We are currently ignoring bugs and issues as we migrate to a </a><br>
-<a>completely fresh and new github repo. Please wait while our</a><br>
-<a>only developer works on it. Thank you for your patience.</a><br>
+<a>We have moved to a new site, this site will soon be completely retired.</a><br>
+<a>Accounts will be deleted on December 13th and will no longer be accessible.</a><br>
+<a>please visit https://shattered-team.github.io/new-shatter/ .And thank you for your understanding.</a><br>
         <button class="FNotification-close-btn" onclick="FNotificationClose()">Close Notification</button>
       </div>
     `;
